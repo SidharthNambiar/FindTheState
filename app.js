@@ -12,6 +12,8 @@ let count = null;
 let clickedStates = [];
 let countrySelected = "usa";
 let map = document.querySelectorAll(`#${countrySelected} path`);
+gameStatus.style.display = "none";
+
 reset.disabled = true;
 
 countrySelect.addEventListener("change", (e) => {
