@@ -1,32 +1,20 @@
-#state{
-    /* transition-timing-function: ease-in-out; */
+#state, .title, .countries{
 
     text-align: center;
-    font-size:x-large;
-    background-color: #e3e3e3;
-    position: static;
-
-}
-.title{
-    text-align: center;
+    /* background-color: #e3e3e3; */
+    /* position: static; */
 
 }
 
-
-
-
-#button{
-    text-align:center;
- 
-}
-
-#usa{
-    text-align: center;
-
-
-}
 body{
-    background-color: #e3e3e3;
+    /* background-color: #; */
+    /* background-color: #202124; */
+    
+}
+
+.title{
+    /* background-color: #202124; */
+    
 }
 
 
