@@ -69,7 +69,7 @@ countrySelect.addEventListener("change", (e) => {
           gameStatus.style.display = "";
 
           gameStatus.classList.value = "notification is-success";
-          gameStatus.textContent = "Great Job! You found all the states!";
+          gameStatus.textContent = "Great Job! You found all locations!";
         } else {
           statesToSelect.splice(chosenStateIdx, 1);
           chosenStateIdx = Math.floor(Math.random() * count);
