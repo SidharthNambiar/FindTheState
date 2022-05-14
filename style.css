@@ -2,10 +2,152 @@
 
     text-align: center;
     /* background-color: #e3e3e3; */
-    position: static;
+    /* position: static; */
 
 }
 
+.maps{
+    text-align: center;
+}
 
+body{
+    /* background-image: url(/gael-gaborel-f7I8uEiYkag-unsplash.jpg); */
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+    /* background-position: top; */
+}
 
+#cheat{
+    position: fixed;
+    /* top: 20px; */
+    /* top: 100px; */
+    right: 10px;
+    /* width: 100px; */
+    /* height: 100px; */
+    /* text-align: center; */
+    /* box-sizing: border-box; */
+}
+body{
+  /* background-color: white; */
+}
 
+/* 
+  .beacon{
+    position:absolute;
+    top:50%;
+    left:50%;
+    background-color:#DB2828;
+    height:2em;
+    width:2em;
+    border-radius:50%;
+    -webkit-animation: grow .4s 1 linear;
+    animation: grow .4s 1 linear;
+    -webkit-transform:translateX(-50%) translateY(-50%);
+  }
+  .beacon:before{
+    position:absolute;
+    content:"";
+    height:2em;
+    width:2em;
+    left:0;
+    top:0;
+    background-color:transparent;
+    border-radius:50%;
+    box-shadow:0px 0px 2px 2px #DB2828;
+    -webkit-animation:active 2s infinite linear;
+    animation:active 2s infinite linear;
+  }
+  
+  @-webkit-keyframes grow {
+    0% {
+      -webkit-transform: scale(.1);
+    }
+    
+    100% {
+      -webkit-transform: scale(1);
+    }
+  }
+  
+  @keyframes grow {
+    0% {
+      transform: scale(.1);
+    }
+    
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @-webkit-keyframes active{
+    0%{
+      -webkit-transform:scale(.1);
+      opacity:1;
+    }
+    70%{
+      -webkit-transform:scale(2.5);
+      opacity:0;
+    }
+    100%{
+      opacity:0;
+    }
+  }
+  
+  @keyframes active{
+    0%{
+      transform:scale(.1);
+      opacity:1;
+    }
+    70%{
+      transform:scale(2.5);
+      opacity:0;
+    }
+    100%{
+      opacity:0;
+    }
+  }
+  
+
+ */
+
+ /* beacon created by Amie Chen https://codepen.io/amiechen/pen/vmKrKL*/
+
+ .container {
+   margin: 100px auto;
+   width: 100px;
+ }
+ .beacon {
+   background-color: #485FC7;
+   border-radius: 50%;
+   width: 20px;
+   height: 20px;
+   animation: shine 2s ease-in-out infinite;
+   position: fixed;
+   &.one {
+     /* top: 100px; */
+     /* left: 300px; */
+   }
+   &.two {
+     top: 300px;
+     left: 400px;
+     animation-delay: 1s;
+   }
+   &.three {
+     top: 250px;
+     left: 300px;
+     animation-delay: 5s;
+   }
+   &.four {
+     top: 150px;
+     left: 500px;
+     animation-delay: 2s;
+   }
+ }
+ @keyframes shine {
+   0%, 20% {
+     box-shadow: 0px 0px 0px 0px rgba(187, 153, 255, 0.49); 
+   }
+   100% {
+     box-shadow: 0px 0px 25px 50px rgba(0, 0, 0, 0); 
+   }
+ }
+ 
