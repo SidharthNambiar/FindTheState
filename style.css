@@ -26,9 +26,30 @@ body{
     /* height: 100px; */
     /* text-align: center; */
     /* box-sizing: border-box; */
+    margin-right:10px;;
+}
+#hint{
+  position: fixed;
+  /* top: 20px; */
+  /* top: 100px; */
+  /* right: 10px; */
+  /* width: 100px; */
+  /* height: 100px; */
+  /* text-align: center; */
+  /* box-sizing: border-box; */
+  margin: 0 0 0 10px;
+}
+#location{
+  /* position: fixed; */
+  text-align: center;
+
 }
 body{
   /* background-color: white; */
+}
+#modal-box{
+  background-color: mediumseagreen;
+  color: white;
 }
 
 /* 

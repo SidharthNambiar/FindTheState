@@ -19,9 +19,10 @@
 ************* Free for Commercial Use, full terms at  http://simplemaps.com/resources/svg-license ************
 ************* Attribution is appreciated! http://simplemaps.com ***************************
 -->
-<!-- <span class="beacon"></span> -->
 
-<div class="hero is-fullheight">
+
+
+<div class="hero is-halfheight">
   <div class="hero-head">
     <div class="title">
       <h1 class="title is-1 has-text-light has-background-dark">
@@ -40,20 +41,23 @@
     </div>
 
    
-<span id="buttons">
+<!-- <span id="buttons"> -->
       
-        <button class="button is-danger is-rounded" id="reset">RESET</button>
+        <button class="button is-danger is-rounded is-normal" id="reset">RESET</button>
       
-        <button class="button is-link is-rounded" id="hint">HINT</button>
+        <button data-target="modal-js-example" class="button is-link is-rounded is-normal" id="hint">LOCATE</button>
    
-        <button class="button is-success is-rounded" id="cheat">CHEAT</button>
+        <button class="button is-success is-rounded is-normal" id="cheat">CHEAT</button>
       
     
 
-</span>   
+<!-- </span>    -->
 
     <div class="locationText">
       <h2 class="subtitle is-3 has-text-info" id="location"></h2>
+      
+        
+      </div>
     </div>
 
   
@@ -2626,6 +2630,20 @@
 
     <div class="hero-foot notification is-warning" id="status"></div>
 </div>
+
+<div id="modal-js-example" class="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content">
+    <div class="box" id="modal-box">
+      <p>Great Job! You found all the locations!</p>
+      <!-- Your content -->
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
     <script src="app.js"></script>
   </body>
 </html>
