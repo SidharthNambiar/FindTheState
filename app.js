@@ -29,11 +29,34 @@ let timerCnt = 5;
 let timerIntervalId = null;
 let timeoutId = null
 
-// Get ms left to timeout
 
-hint.addEventListener("click", (e) => {
+
+
+
+let mouseHoldIntervalId;
+let mouseholdCnt = 0;
+body.addEventListener("mousedown", (e) => {
+
+  
+  mouseHoldIntervalId = setInterval(() => {
+    mouseholdCnt++;
+    if (mouseholdCnt >= 3) showHint();
+  },1000)
+  
+  
+  body.addEventListener("mouseup", (e) => {
+    clearInterval(mouseHoldIntervalId)
+    mouseholdCnt = 0;
+    
+ 
+  })
+
+ 
+})
+
+function showHint() {
   hint.disabled = true;
-
+  
   for (let location of map) {
     if (locationToSelect === location.dataset.name) {
       hintLocation = location.getBoundingClientRect();
@@ -82,7 +105,14 @@ hint.addEventListener("click", (e) => {
       }, 1000);
     }
   }
-});
+}
+
+
+  hint.addEventListener("click", (e) => {
+  showHint()
+  });
+
+
 
 mapSelect.addEventListener("change", (e) => {
   reset.disabled = false;

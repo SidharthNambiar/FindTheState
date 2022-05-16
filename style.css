@@ -29,7 +29,7 @@ body{
     margin-right:10px;;
 }
 #hint{
-  position: fixed;
+  position: sticky;
   /* top: 20px; */
   /* top: 100px; */
   /* right: 10px; */
@@ -51,6 +51,7 @@ body{
   background-color: mediumseagreen;
   color: white;
 }
+
 
 /* 
   .beacon{
