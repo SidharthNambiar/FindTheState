@@ -66,9 +66,10 @@ function showHint() {
       hintBeacon.classList.add("beacon");
 
       // location.style.fill = "#ffe08a";
-      gameStatus.style.display = "";
-      gameStatus.classList.value = "notification is-link";
-      gameStatus.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+      // gameStatus.style.display = "";
+      // gameStatus.classList.value = "notification is-link";
+      // gameStatus.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+      hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
       timerCnt--;
       toggle = 0;
 
@@ -87,14 +88,17 @@ function showHint() {
 
         gameStatus.style.display = "none";
         clearInterval(timerIntervalId);
+        hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
         timerCnt = 5;
         toggle = 1;
       }, 5000);
 
       timerIntervalId = setInterval(() => {
-        gameStatus.style.display = "";
-        gameStatus.classList.value = "notification is-link";
-        gameStatus.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+        // gameStatus.style.display = "";
+        // gameStatus.classList.value = "notification is-link";
+        // gameStatus.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+        hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+
         timerCnt--;
       }, 1000);
     }
@@ -115,6 +119,7 @@ let gameTimer = 0;
 
 
 mapSelect.addEventListener("change", (e) => {
+  body.classList.remove("bg-img")
   gameTimerLabel.textContent = "00:00";
   gameTimerId = setInterval(() => {
     
@@ -190,8 +195,7 @@ mapSelect.addEventListener("change", (e) => {
   locationToSelect = allLocations[chosenLocationIdx];
 
   locationLabel.textContent = locationToSelect.toUpperCase();
-  hint.textContent = "LOCATE " + locationToSelect.toUpperCase();
-
+  hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
   gameStatus.style.display = "none";
 
   locationLabel.style.color = "dark-grey";
@@ -248,14 +252,13 @@ mapSelect.addEventListener("change", (e) => {
           chosenLocationIdx = Math.floor(Math.random() * count);
           locationToSelect = allLocations[chosenLocationIdx];
           locationLabel.textContent = locationToSelect.toUpperCase();
-          hint.textContent = "LOCATE " + locationToSelect.toUpperCase();
-        }
+          hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";      }
       } else {
         if (location.style.fill !== "mediumseagreen") {
           location.style.fill = "#ffe08a";
-          gameStatus.style.display = "";
-          gameStatus.classList.value = "notification is-warning";
-          gameStatus.textContent = `Incorrect! You selected ${location.dataset.name.toUpperCase()}. Try Again`;
+          // gameStatus.style.display = "";
+          // gameStatus.classList.value = "notification is-warning";
+          // gameStatus.textContent = `Incorrect! You selected ${location.dataset.name.toUpperCase()}. Try Again`;
           clickedLocations.push(location);
         }
       }
@@ -350,7 +353,7 @@ cheat.addEventListener("click", (e) => {
     locationToSelect = allLocations[chosenLocationIdx];
     if (count !== 0) {
       locationLabel.textContent = locationToSelect.toUpperCase();
-      hint.textContent = "LOCATE " + locationToSelect.toUpperCase();
+      hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
     }
   }
 
@@ -371,6 +374,7 @@ reset.addEventListener("click", (e) => {
   clearInterval(gameTimerId)
   clearInterval(timerIntervalId)
   clearTimeout(timeoutId)
+  hint.textContent ="HINT"
   minuteCount = 0;
   secondCount = 0;
   gameTimer = 0;
@@ -409,4 +413,7 @@ reset.addEventListener("click", (e) => {
   hintBeacon.style.y = "";
 
   hintBeacon.remove();
+
+  mapSelect.classList.add("is-focused")
+  body.classList.add("bg-img")
 });

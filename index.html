@@ -12,7 +12,7 @@
 
     <title>Find The Location</title>
   </head>
-  <body>
+  <body class="bg-img">
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <!--
 ************* Copyright (c) 2017 Pareto Softare, LLC DBA Simplemaps.com *******************		
@@ -22,7 +22,7 @@
 
 
 
-<div class="hero is-halfheight">
+<div class="hero is-fullheight">
   <div class="hero-head">
     <div class="title">
       <h1 class="title is-1 has-text-light has-background-dark">
@@ -45,7 +45,7 @@
       
         <button class="button is-danger is-rounded is-normal" id="reset">RESET</button>
       
-        <button data-target="modal-js-example" class="button is-link is-rounded is-normal" id="hint">LOCATE</button>
+        <button data-target="modal-js-example" class="button is-link is-rounded is-normal" id="hint">HINT</button>
    
         <button class="button is-success is-rounded is-normal" id="cheat">CHEAT</button>
       
@@ -54,12 +54,14 @@
 <!-- </span>    -->
 
     <div class="locationText">
-      <h2 class="subtitle is-3 has-text-info" id="location"></h2>
       
-        
+      <h2 class="subtitle is-3 is-dark" id="location"></h2>
+    
     </div>
+    
 <div>
 
+  <div>
     <h3 class="subtitle is-4 has-text-info" id="timer"></h3>
   </div>
 
