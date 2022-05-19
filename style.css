@@ -36,6 +36,11 @@
 body{
   background-color: #F9F0E0;
 }
+#title{
+  color: #F9F0E0;
+
+  
+}
 #reset{
   margin-left: 10px;
 }
