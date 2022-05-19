@@ -15,6 +15,9 @@
 #timer{
   font-weight: bold;
 }
+.select{
+  margin-left: 10px;
+}
 
 .bg-img{
      background-image: url(/gael-gaborel-f7I8uEiYkag-unsplash.jpg); 
@@ -29,10 +32,13 @@
     
 }
 
+
 body{
   background-color: #F9F0E0;
 }
-
+#reset{
+  margin-left: 10px;
+}
 #cheat{
     position: fixed;
     /* top: 20px; */
