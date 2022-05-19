@@ -236,9 +236,11 @@ mapSelect.addEventListener("change", (e) => {
 
         if (count === 0) {
           clearInterval(gameTimerId);
+          reset.classList.add("is-focused")
           gameTimer = 0;
           modal.classList.add("is-active");
           // hint.disabled && cheat.disabled;
+          hint.textContent="HINT"
           hint.disabled = true;
           cheat.disabled = true;
           locationLabel.textContent = "";
@@ -281,6 +283,7 @@ body.addEventListener("keyup", (e) => {
 
   if (keyCount === 5 && !hint.disabled) {
     keyCount = 0;
+    hint.textContent="HINT"
     hint.disabled = true;
     cheat.disabled = true;
     clearInterval(timerIntervalId);
@@ -307,6 +310,7 @@ body.addEventListener("keyup", (e) => {
 
     locationLabel.textContent = "";
     gameStatus.style.display = "none";
+    reset.classList.add("is-focused")
     // gameStatus.classList.value = "notification is-success";
     // gameStatus.textContent = "Great Job! You found all locations!";
   }
@@ -338,12 +342,14 @@ cheat.addEventListener("click", (e) => {
 
   if (count === 0) {
     clearInterval(gameTimerId)
+    hint.textContent="HINT"
     gameTimer = 0;
     cheat.disabled = true;
     hint.disabled = true;
     locationLabel.textContent = "";
     gameStatus.style.display = "none";
     modal.classList.add("is-active");
+    reset.classList.add("is-focused")
 
     // gameStatus.classList.value = "notification is-success";
     // gameStatus.textContent = "Great Job Cheating! You found all locations!";
