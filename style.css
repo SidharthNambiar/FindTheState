@@ -17,16 +17,20 @@
 }
 
 .bg-img{
-    background-image: url(/gael-gaborel-f7I8uEiYkag-unsplash.jpg);
+     background-image: url(/gael-gaborel-f7I8uEiYkag-unsplash.jpg); 
 
-    /* background-repeat: no-repeat;
-    background-size: cover; */
-    /* background-position: top; */
-    background-position: center center;
+    
+     background-position: center center;
     background-repeat:  no-repeat;
     background-attachment: fixed;
     background-size:  cover;
-    background-color: #999;
+    background-color: #999; 
+
+    
+}
+
+body{
+  background-color: #F9F0E0;
 }
 
 #cheat{
