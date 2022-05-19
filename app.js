@@ -8,6 +8,7 @@ const cheat = document.querySelector("#cheat");
 const body = document.querySelector("body");
 const hintBeacon = document.createElement("span");
 const modal = document.querySelector(".modal");
+const gameTimerLabel = document.querySelector("#timer");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -25,38 +26,33 @@ gameStatus.style.display = "none";
 reset.disabled = true;
 hint.disabled = true;
 cheat.disabled = true;
+
 let timerCnt = 5;
 let timerIntervalId = null;
-let timeoutId = null
+let timeoutId = null;
+
+let gameTimerId = null;
 
 
 
+// let mouseHoldIntervalId;
+// let mouseholdCnt = 0;
 
+// body.addEventListener("mousedown", (e) => {
+//   mouseHoldIntervalId = setInterval(() => {
+//     mouseholdCnt++;
+//     if (mouseholdCnt >= 3) showHint();
+//   }, 1000);
 
-let mouseHoldIntervalId;
-let mouseholdCnt = 0;
-body.addEventListener("mousedown", (e) => {
-
-  
-  mouseHoldIntervalId = setInterval(() => {
-    mouseholdCnt++;
-    if (mouseholdCnt >= 3) showHint();
-  },1000)
-  
-  
-  body.addEventListener("mouseup", (e) => {
-    clearInterval(mouseHoldIntervalId)
-    mouseholdCnt = 0;
-    
- 
-  })
-
- 
-})
+//   body.addEventListener("mouseup", (e) => {
+//     clearInterval(mouseHoldIntervalId);
+//     mouseholdCnt = 0;
+//   });
+// });
 
 function showHint() {
   hint.disabled = true;
-  
+
   for (let location of map) {
     if (locationToSelect === location.dataset.name) {
       hintLocation = location.getBoundingClientRect();
@@ -95,8 +91,6 @@ function showHint() {
         toggle = 1;
       }, 5000);
 
-     
-
       timerIntervalId = setInterval(() => {
         gameStatus.style.display = "";
         gameStatus.classList.value = "notification is-link";
@@ -107,20 +101,62 @@ function showHint() {
   }
 }
 
+hint.addEventListener("click", (e) => {
+  showHint();
+});
 
-  hint.addEventListener("click", (e) => {
-  showHint()
-  });
+let minuteLabel = 0;
+let minuteCount = 0;
+let secondLabel = 0;
+let secondCount = 0;
+
+let gameTimer = 0;
 
 
 
 mapSelect.addEventListener("change", (e) => {
+  gameTimerLabel.textContent = "00:00";
+  gameTimerId = setInterval(() => {
+    
+    gameTimer++;
+    secondCount++;
+    // console.log(gameTimer)
+
+    if (secondCount === 60) {
+      minuteCount++;
+      secondCount = 0;
+    }
+
+    if (secondCount < 10) {
+      secondLabel = `0${secondCount}`
+    }
+    else {
+      secondLabel = `${secondCount}`
+    }
+
+    if (minuteCount < 10) {
+      minuteLabel = `0${minuteCount}`
+    }
+    else {
+      minuteLabel = `${minuteCount}`
+    }
+
+    gameTimerLabel.textContent = `${minuteLabel}:${secondLabel}`
+
+    
+  }, 1000);
+
   reset.disabled = false;
   hint.disabled = false;
   cheat.disabled = false;
   locationLabel.textContent = "";
+  gameTimerLabel.style.textContent = "";
   mapSelected = mapSelect.value;
   mapSelect.disabled = true;
+
+
+  
+
 
   //Only display the selected map; hide the others
   for (let map of maps) {
@@ -169,8 +205,9 @@ mapSelect.addEventListener("change", (e) => {
 
       if (clickedLocation === locationToSelect) {
         hintBeacon.classList.remove("beacon");
-        clearInterval(timerIntervalId)
-        clearTimeout(timeoutId)
+        clearInterval(timerIntervalId);
+        clearTimeout(timeoutId);
+
         hint.disabled = false;
         timerCnt = 5;
         hintLocation = "";
@@ -194,6 +231,8 @@ mapSelect.addEventListener("change", (e) => {
         count = count - 1;
 
         if (count === 0) {
+          clearInterval(gameTimerId);
+          gameTimer = 0;
           modal.classList.add("is-active");
           // hint.disabled && cheat.disabled;
           hint.disabled = true;
@@ -242,6 +281,8 @@ body.addEventListener("keyup", (e) => {
     hint.disabled = true;
     cheat.disabled = true;
     clearInterval(timerIntervalId);
+    clearInterval(gameTimerId)
+    gameTimer = 0;
     // clearTimeout(timeoutId)
     timerCnt = 5;
 
@@ -277,8 +318,8 @@ body.addEventListener("click", (e) => {
 cheat.addEventListener("click", (e) => {
   e.stopPropagation();
   gameStatus.style.display = "none";
-  clearInterval(timerIntervalId)
-  clearTimeout(timeoutId)
+  clearInterval(timerIntervalId);
+  clearTimeout(timeoutId);
   hint.disabled = false;
   timerCnt = 5;
 
@@ -293,14 +334,16 @@ cheat.addEventListener("click", (e) => {
   }
 
   if (count === 0) {
+    clearInterval(gameTimerId)
+    gameTimer = 0;
     cheat.disabled = true;
     hint.disabled = true;
     locationLabel.textContent = "";
     gameStatus.style.display = "none";
     modal.classList.add("is-active");
+
     // gameStatus.classList.value = "notification is-success";
     // gameStatus.textContent = "Great Job Cheating! You found all locations!";
-    
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * count);
@@ -325,6 +368,13 @@ cheat.addEventListener("click", (e) => {
 });
 
 reset.addEventListener("click", (e) => {
+  clearInterval(gameTimerId)
+  clearInterval(timerIntervalId)
+  clearTimeout(timeoutId)
+  minuteCount = 0;
+  secondCount = 0;
+  gameTimer = 0;
+  gameTimerLabel.textContent = ""
   allLocations = allLocations.slice();
   clickedLocation = null;
   clickedLocations = [];
