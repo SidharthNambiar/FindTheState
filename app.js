@@ -1,7 +1,7 @@
 const mapSelect = document.querySelector("#mapSelect");
 const maps = document.querySelectorAll(".maps");
 const locationLabel = document.querySelector("#location");
-const gameStatus = document.querySelector("#status");
+// const gameStatus = document.querySelector("#status");
 const reset = document.querySelector("#reset");
 const hint = document.querySelector("#hint");
 const cheat = document.querySelector("#cheat");
@@ -9,6 +9,7 @@ const body = document.querySelector("body");
 const hintBeacon = document.createElement("span");
 const modal = document.querySelector(".modal");
 const gameTimerLabel = document.querySelector("#timer");
+const wrongTag = document.createElement("span");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -21,7 +22,7 @@ let toggle = 1;
 let map = document.querySelectorAll(`#${mapSelected} path`);
 let hintLocation = null;
 
-gameStatus.style.display = "none";
+// gameStatus.style.display = "none";
 
 reset.disabled = true;
 hint.disabled = true;
@@ -32,8 +33,6 @@ let timerIntervalId = null;
 let timeoutId = null;
 
 let gameTimerId = null;
-
-
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -50,25 +49,25 @@ let gameTimerId = null;
 //   });
 // });
 
+function placeItemOnLocation(location, item) {
+  itemLocation = location.getBoundingClientRect();
+  item.style.left = itemLocation.left + "px";
+  item.style.right = itemLocation.right + "px";
+  item.style.top = itemLocation.top + "px";
+  item.style.bottom = itemLocation.bottom + "px";
+  item.style.x = itemLocation.x + "px";
+  item.style.y = itemLocation.y + "px";
+}
+
 function showHint() {
   hint.disabled = true;
 
   for (let location of map) {
     if (locationToSelect === location.dataset.name) {
-      hintLocation = location.getBoundingClientRect();
+      placeItemOnLocation(location, hintBeacon);
 
-      hintBeacon.style.left = hintLocation.left + "px";
-      hintBeacon.style.right = hintLocation.right + "px";
-      hintBeacon.style.top = hintLocation.top + "px";
-      hintBeacon.style.bottom = hintLocation.bottom + "px";
-      hintBeacon.style.x = hintLocation.x + "px";
-      hintBeacon.style.y = hintLocation.y + "px";
       hintBeacon.classList.add("beacon");
 
-      // location.style.fill = "#ffe08a";
-      // gameStatus.style.display = "";
-      // gameStatus.classList.value = "notification is-link";
-      // gameStatus.textContent = `HINT COUNTDOWN: ${timerCnt}`;
       hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
       timerCnt--;
       toggle = 0;
@@ -86,7 +85,7 @@ function showHint() {
         hintBeacon.style.x = "";
         hintBeacon.style.y = "";
 
-        gameStatus.style.display = "none";
+      //  gameStatus.style.display = "none";
         clearInterval(timerIntervalId);
         hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
         timerCnt = 5;
@@ -94,9 +93,7 @@ function showHint() {
       }, 5000);
 
       timerIntervalId = setInterval(() => {
-        // gameStatus.style.display = "";
-        // gameStatus.classList.value = "notification is-link";
-        // gameStatus.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+      
         hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
 
         timerCnt--;
@@ -116,16 +113,12 @@ let secondCount = 0;
 
 let gameTimer = 0;
 
-
-
 mapSelect.addEventListener("change", (e) => {
-  body.classList.remove("bg-img")
+  body.classList.remove("bg-img");
   gameTimerLabel.textContent = "00:00";
   gameTimerId = setInterval(() => {
-    
     gameTimer++;
     secondCount++;
-    // console.log(gameTimer)
 
     if (secondCount === 60) {
       minuteCount++;
@@ -133,22 +126,18 @@ mapSelect.addEventListener("change", (e) => {
     }
 
     if (secondCount < 10) {
-      secondLabel = `0${secondCount}`
-    }
-    else {
-      secondLabel = `${secondCount}`
+      secondLabel = `0${secondCount}`;
+    } else {
+      secondLabel = `${secondCount}`;
     }
 
     if (minuteCount < 10) {
-      minuteLabel = `0${minuteCount}`
-    }
-    else {
-      minuteLabel = `${minuteCount}`
+      minuteLabel = `0${minuteCount}`;
+    } else {
+      minuteLabel = `${minuteCount}`;
     }
 
-    gameTimerLabel.textContent = `${minuteLabel}:${secondLabel}`
-
-    
+    gameTimerLabel.textContent = `${minuteLabel}:${secondLabel}`;
   }, 1000);
 
   reset.disabled = false;
@@ -158,10 +147,6 @@ mapSelect.addEventListener("change", (e) => {
   gameTimerLabel.style.textContent = "";
   mapSelected = mapSelect.value;
   mapSelect.disabled = true;
-
-
-  
-
 
   //Only display the selected map; hide the others
   for (let map of maps) {
@@ -187,7 +172,7 @@ mapSelect.addEventListener("change", (e) => {
     allLocations.push(location.dataset.name);
     location.style.fill = "white";
     location.classList.add("js-modal-trigger");
-    // location.setAttribute("data-target","modal-js-example")
+   
   }
 
   clickedLocation = null;
@@ -196,7 +181,7 @@ mapSelect.addEventListener("change", (e) => {
 
   locationLabel.textContent = locationToSelect.toUpperCase();
   hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
-  gameStatus.style.display = "none";
+  // gameStatus.style.display = "none";
 
   locationLabel.style.color = "dark-grey";
   count = allLocations.length;
@@ -211,6 +196,8 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.classList.remove("beacon");
         clearInterval(timerIntervalId);
         clearTimeout(timeoutId);
+        wrongTag.classList.remove("wrongTag");
+        wrongTag.textContent = "";
 
         hint.disabled = false;
         timerCnt = 5;
@@ -222,46 +209,53 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.style.x = "";
         hintBeacon.style.y = "";
         toggle = 1;
-        gameStatus.style.display = "none";
-        if (clickedLocations.length !== 0) {
-          for (let location of clickedLocations) {
-            if (location.style.fill === "rgb(255, 224, 138)") {
-              location.style.fill = "white";
-            }
-          }
-          clickedLocations = [];
-        }
+        // gameStatus.style.display = "none";
+        // if (clickedLocations.length !== 0) {
+        //   for (let location of clickedLocations) {
+        //     if (location.style.fill === "rgb(255, 224, 138)") {
+        //       location.style.fill = "white";
+        //     }
+        //   }
+        //   clickedLocations = [];
+        // }
         location.style.fill = "mediumseagreen";
         count = count - 1;
 
         if (count === 0) {
           clearInterval(gameTimerId);
-          reset.classList.add("is-focused")
+          reset.classList.add("is-focused");
           gameTimer = 0;
           modal.classList.add("is-active");
           // hint.disabled && cheat.disabled;
-          hint.textContent="HINT"
+          hint.textContent = "HINT";
           hint.disabled = true;
           cheat.disabled = true;
           locationLabel.textContent = "";
-          gameStatus.style.display = "none";
+          // gameStatus.style.display = "none";
 
-          // gameStatus.classList.value = "notification is-success";
-          // gameStatus.textContent =
-          //   "Great Job! You found all locations! Click on RESET to select another map.";
+         
         } else {
           allLocations.splice(chosenLocationIdx, 1);
           chosenLocationIdx = Math.floor(Math.random() * count);
           locationToSelect = allLocations[chosenLocationIdx];
           locationLabel.textContent = locationToSelect.toUpperCase();
-          hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";      }
+          hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
+        }
       } else {
         if (location.style.fill !== "mediumseagreen") {
-          location.style.fill = "#ffe08a";
-          // gameStatus.style.display = "";
-          // gameStatus.classList.value = "notification is-warning";
-          // gameStatus.textContent = `Incorrect! You selected ${location.dataset.name.toUpperCase()}. Try Again`;
-          clickedLocations.push(location);
+          placeItemOnLocation(location, wrongTag);
+          wrongTag.textContent = "WRONG!";
+          wrongTag.classList.add("wrongTag", "has-text-dark");
+          body.append(wrongTag);
+          setTimeout(() => {
+            wrongTag.classList.remove("wrongTag");
+            wrongTag.textContent = "";
+          }, 1000);
+          //   // location.style.fill = "#ffe08a";
+          //   // gameStatus.style.display = "";
+          //   // gameStatus.classList.value = "notification is-warning";
+          //   // gameStatus.textContent = `Incorrect! You selected ${location.dataset.name.toUpperCase()}. Try Again`;
+          //   clickedLocations.push(location);
         }
       }
     });
@@ -283,11 +277,11 @@ body.addEventListener("keyup", (e) => {
 
   if (keyCount === 5 && !hint.disabled) {
     keyCount = 0;
-    hint.textContent="HINT"
+    hint.textContent = "HINT";
     hint.disabled = true;
     cheat.disabled = true;
     clearInterval(timerIntervalId);
-    clearInterval(gameTimerId)
+    clearInterval(gameTimerId);
     gameTimer = 0;
     // clearTimeout(timeoutId)
     timerCnt = 5;
@@ -304,15 +298,14 @@ body.addEventListener("keyup", (e) => {
       locationToSelect = allLocations[chosenLocationIdx];
       if (count !== 0)
         locationLabel.textContent = locationToSelect.toUpperCase();
-      // hint.textContent = "LOCATE " + locationToSelect.toUpperCase();
+      
     }
     modal.classList.add("is-active");
 
     locationLabel.textContent = "";
-    gameStatus.style.display = "none";
-    reset.classList.add("is-focused")
-    // gameStatus.classList.value = "notification is-success";
-    // gameStatus.textContent = "Great Job! You found all locations!";
+    // gameStatus.style.display = "none";
+    reset.classList.add("is-focused");
+   
   }
 });
 
@@ -324,7 +317,7 @@ body.addEventListener("click", (e) => {
 
 cheat.addEventListener("click", (e) => {
   e.stopPropagation();
-  gameStatus.style.display = "none";
+  // gameStatus.style.display = "none";
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
   hint.disabled = false;
@@ -341,18 +334,16 @@ cheat.addEventListener("click", (e) => {
   }
 
   if (count === 0) {
-    clearInterval(gameTimerId)
-    hint.textContent="HINT"
+    clearInterval(gameTimerId);
+    hint.textContent = "HINT";
     gameTimer = 0;
     cheat.disabled = true;
     hint.disabled = true;
     locationLabel.textContent = "";
-    gameStatus.style.display = "none";
+    // gameStatus.style.display = "none";
     modal.classList.add("is-active");
-    reset.classList.add("is-focused")
+    reset.classList.add("is-focused");
 
-    // gameStatus.classList.value = "notification is-success";
-    // gameStatus.textContent = "Great Job Cheating! You found all locations!";
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * count);
@@ -377,21 +368,21 @@ cheat.addEventListener("click", (e) => {
 });
 
 reset.addEventListener("click", (e) => {
-  clearInterval(gameTimerId)
-  clearInterval(timerIntervalId)
-  clearTimeout(timeoutId)
-  hint.textContent ="HINT"
+  clearInterval(gameTimerId);
+  clearInterval(timerIntervalId);
+  clearTimeout(timeoutId);
+  hint.textContent = "HINT";
   minuteCount = 0;
   secondCount = 0;
   gameTimer = 0;
-  gameTimerLabel.textContent = ""
+  gameTimerLabel.textContent = "";
   allLocations = allLocations.slice();
   clickedLocation = null;
   clickedLocations = [];
 
   locationLabel.textContent = "";
-  gameStatus.textContent = "";
-  gameStatus.style.display = "none";
+  // gameStatus.textContent = "";
+  // gameStatus.style.display = "none";
 
   for (let location of map) {
     location.style.fill = "white";
@@ -420,6 +411,6 @@ reset.addEventListener("click", (e) => {
 
   hintBeacon.remove();
 
-  mapSelect.classList.add("is-focused")
-  body.classList.add("bg-img")
+  mapSelect.classList.add("is-focused");
+  body.classList.add("bg-img");
 });
