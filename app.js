@@ -200,7 +200,7 @@ mapSelect.addEventListener("change", (e) => {
         resultTag.textContent = "";
 
         hint.disabled = false;
-        timerCnt = 5;
+        timerCnt = 3;
         hintLocation = "";
         hintBeacon.style.left = "";
         hintBeacon.style.right = "";
@@ -292,7 +292,7 @@ body.addEventListener("keyup", (e) => {
     clearInterval(gameTimerId);
     gameTimer = 0;
     // clearTimeout(timeoutId)
-    timerCnt = 5;
+    timerCnt = 3;
 
     while (count !== 0) {
       for (let location of map) {
@@ -329,7 +329,7 @@ cheat.addEventListener("click", (e) => {
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
   hint.disabled = false;
-  timerCnt = 5;
+  timerCnt = 3;
 
   count = count - 1;
   for (let location of map) {
