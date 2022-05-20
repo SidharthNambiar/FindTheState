@@ -81,7 +81,7 @@ table {
 }
 
 
-.hintTag, .wrongTag{
+ .wrongTag{
   /* box-sizing: content-box; */
   width: fit-content;
   height: fit-content;
@@ -98,6 +98,23 @@ table {
   color: white;
   font-weight: bold;
 
+}
+
+.rightTag{
+  width: fit-content;
+  height: fit-content;
+  /* border: 2px soli */
+ 
+  /* color: black; */
+  position: fixed;
+  background-color: mediumseagreen;
+  border: 1px solid mediumseagreen;
+  border-radius: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  opacity: .9;
+  color: white;
+  font-weight: bold;
 }
 
 .bg-img{
@@ -176,6 +193,7 @@ body{
    &.one {
      /* top: 100px; */
      /* left: 300px; */
+     
    }
    &.two {
      top: 300px;

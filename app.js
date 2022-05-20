@@ -9,7 +9,7 @@ const body = document.querySelector("body");
 const hintBeacon = document.createElement("span");
 const modal = document.querySelector(".modal");
 const gameTimerLabel = document.querySelector("#timer");
-const wrongTag = document.createElement("span");
+const resultTag = document.createElement("span");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -28,7 +28,7 @@ reset.disabled = true;
 hint.disabled = true;
 cheat.disabled = true;
 
-let timerCnt = 5;
+let timerCnt = 3;
 let timerIntervalId = null;
 let timeoutId = null;
 
@@ -88,9 +88,9 @@ function showHint() {
       //  gameStatus.style.display = "none";
         clearInterval(timerIntervalId);
         hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
-        timerCnt = 5;
+        timerCnt = 3;
         toggle = 1;
-      }, 5000);
+      }, 3000);
 
       timerIntervalId = setInterval(() => {
       
@@ -196,8 +196,8 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.classList.remove("beacon");
         clearInterval(timerIntervalId);
         clearTimeout(timeoutId);
-        wrongTag.classList.remove("wrongTag");
-        wrongTag.textContent = "";
+        resultTag.classList.remove("wrongTag","has-text-dark");
+        resultTag.textContent = "";
 
         hint.disabled = false;
         timerCnt = 5;
@@ -220,6 +220,14 @@ mapSelect.addEventListener("change", (e) => {
         // }
         location.style.fill = "mediumseagreen";
         count = count - 1;
+        placeItemOnLocation(location, resultTag);
+        resultTag.textContent = "RIGHT!";
+        resultTag.classList.add("rightTag", "is-white");
+        body.append(resultTag);
+        setTimeout(() => {
+          resultTag.classList.remove("rightTag", "is-white");
+          resultTag.textContent = "";
+        }, 1000);
 
         if (count === 0) {
           clearInterval(gameTimerId);
@@ -243,13 +251,13 @@ mapSelect.addEventListener("change", (e) => {
         }
       } else {
         if (location.style.fill !== "mediumseagreen") {
-          placeItemOnLocation(location, wrongTag);
-          wrongTag.textContent = "WRONG!";
-          wrongTag.classList.add("wrongTag", "has-text-dark");
-          body.append(wrongTag);
+          placeItemOnLocation(location, resultTag);
+          resultTag.textContent = "WRONG!";
+          resultTag.classList.add("wrongTag", "has-text-dark");
+          body.append(resultTag);
           setTimeout(() => {
-            wrongTag.classList.remove("wrongTag");
-            wrongTag.textContent = "";
+            resultTag.classList.remove("wrongTag", "has-text-dark");
+            resultTag.textContent = "";
           }, 1000);
           //   // location.style.fill = "#ffe08a";
           //   // gameStatus.style.display = "";
