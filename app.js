@@ -220,7 +220,22 @@ mapSelect.addEventListener("change", (e) => {
         // }
         location.style.fill = "mediumseagreen";
         count = count - 1;
-        placeItemOnLocation(location, resultTag);
+        // placeItemOnLocation(location, resultTag);
+        // item.style.left = itemLocation.left + "px";
+      //  item.style.right = itemLocation.right + "px";
+      //  item.style.top = itemLocation.top + "px";
+      //  item.style.bottom = itemLocation.bottom + "px";
+        
+        
+        // resultTag.style.left = e.offsetX + "px";
+        // resultTag.style.right = e.offsetY + "px";
+
+        
+        resultTag.style.left = e.x +"px";
+        resultTag.style.top = e.y +"px";
+
+        
+        
         resultTag.textContent = "RIGHT!";
         resultTag.classList.add("rightTag", "is-white");
         body.append(resultTag);
@@ -251,7 +266,9 @@ mapSelect.addEventListener("change", (e) => {
         }
       } else {
         if (location.style.fill !== "mediumseagreen") {
-          placeItemOnLocation(location, resultTag);
+          // placeItemOnLocation(location, resultTag);
+          resultTag.style.left = e.x +"px";
+        resultTag.style.top = e.y +"px";
           resultTag.textContent = "WRONG!";
           resultTag.classList.add("wrongTag", "has-text-dark");
           body.append(resultTag);
