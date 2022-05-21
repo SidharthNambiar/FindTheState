@@ -85,9 +85,7 @@ table {
   /* box-sizing: content-box; */
   width: fit-content;
   height: fit-content;
-  /* border: 2px soli */
- 
-  /* color: black; */
+
   position: fixed;
   background-color: #ffe08a;
   border: 1px solid #ffe08a;

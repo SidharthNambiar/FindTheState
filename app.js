@@ -209,26 +209,10 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.style.x = "";
         hintBeacon.style.y = "";
         toggle = 1;
-        // gameStatus.style.display = "none";
-        // if (clickedLocations.length !== 0) {
-        //   for (let location of clickedLocations) {
-        //     if (location.style.fill === "rgb(255, 224, 138)") {
-        //       location.style.fill = "white";
-        //     }
-        //   }
-        //   clickedLocations = [];
-        // }
+       
         location.style.fill = "mediumseagreen";
         count = count - 1;
-        // placeItemOnLocation(location, resultTag);
-        // item.style.left = itemLocation.left + "px";
-      //  item.style.right = itemLocation.right + "px";
-      //  item.style.top = itemLocation.top + "px";
-      //  item.style.bottom = itemLocation.bottom + "px";
-        
-        
-        // resultTag.style.left = e.offsetX + "px";
-        // resultTag.style.right = e.offsetY + "px";
+       
 
         
         resultTag.style.left = e.x +"px";
@@ -267,6 +251,7 @@ mapSelect.addEventListener("change", (e) => {
       } else {
         if (location.style.fill !== "mediumseagreen") {
           // placeItemOnLocation(location, resultTag);
+          resultTag.classList.remove("rightTag", "is-white")
           resultTag.style.left = e.x +"px";
         resultTag.style.top = e.y +"px";
           resultTag.textContent = "WRONG!";
