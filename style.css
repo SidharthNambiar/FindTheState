@@ -65,10 +65,6 @@ table {
   /* background-color: #596887; */
   background-color: #657889;
 }
-#controls{
-  /* background-color: #E3E2E2; */
-  /* margin: none; */
-}
 
 
 #timer{
@@ -97,6 +93,7 @@ table {
   opacity: .9;
   color: white;
   font-weight: bold;
+  
 
 }
 
@@ -144,6 +141,12 @@ body{
 #reset{
   margin-left: 10px;
 }
+#hintCheatButtons{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  
+}
 #cheat{
     position: fixed;
     /* top: 20px; */
@@ -153,15 +156,15 @@ body{
     /* height: 100px; */
     /* text-align: center; */
     /* box-sizing: border-box; */
-    margin-right:10px;
+    /* margin-right:10px; */
+    margin-left:10px;
+    
     opacity: .8;
 }
 #hint{
-  position: fixed;
-  opacity: .8;
- 
-  margin: 0 0 0 10px;
+  
 }
+
 #location{
   /* position: fixed; */
   text-align: center;
@@ -171,6 +174,11 @@ body{
 
 .locatioText{
   margin: auto;
+}
+
+#hintCheatButtons{
+  display: flex;
+  flex-direction: row;
 }
 
 #modal-box{
@@ -188,7 +196,7 @@ body{
  .beacon {
    /* background-color: #485FC7; */
    /* background-color: rgb(241, 70, 104); */
-   background-color: rgb(67,134,193);
+   background-color: rgb(241, 70, 104);
    opacity: .5;
    border-radius: 50%;
    width: 12px;
@@ -205,12 +213,12 @@ body{
  }
  @keyframes shine {
    0%, 20% {
-     box-shadow: 0px 0px 0px 0px rgba(241, 70, 104, 0.6); 
+     box-shadow: 0px 0px 0px 0px rgba(241, 70, 104, 1); 
    }
    100% {
      box-shadow: 0px 0px 25px 50px rgba(0, 0, 0, 0); 
    }
  }
- 
 
  
+

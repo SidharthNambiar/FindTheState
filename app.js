@@ -25,8 +25,11 @@ let hintLocation = null;
 // gameStatus.style.display = "none";
 
 reset.disabled = true;
-hint.disabled = true;
-cheat.disabled = true;
+// hint.disabled = true;
+// cheat.disabled = true;
+hint.style.display = "none"
+cheat.style.display = "none"
+
 
 let timerCnt = 5;
 let timerIntervalId = null;
@@ -113,7 +116,11 @@ let secondCount = 0;
 
 let gameTimer = 0;
 
+
+
 mapSelect.addEventListener("change", (e) => {
+  hint.style.display = "";
+  cheat.style.display = "";
   body.classList.remove("bg-img");
   gameTimerLabel.textContent = "00:00";
   gameTimerId = setInterval(() => {
@@ -239,6 +246,8 @@ mapSelect.addEventListener("change", (e) => {
         }, 1000);
 
         if (count === 0) {
+          hint.style.display = "none";
+          cheat.style.display = "none"
           clearInterval(gameTimerId);
           reset.classList.add("is-focused");
           gameTimer = 0;
@@ -296,6 +305,8 @@ body.addEventListener("keyup", (e) => {
   }
 
   if (keyCount === 5 && !hint.disabled) {
+    hint.style.display = "none";
+    cheat.style.display = "none"
     keyCount = 0;
     hint.textContent = "HINT";
     hint.disabled = true;
@@ -363,6 +374,8 @@ cheat.addEventListener("click", (e) => {
     // gameStatus.style.display = "none";
     modal.classList.add("is-active");
     reset.classList.add("is-focused");
+    hint.style.display = "none";
+    cheat.style.display = "none"
 
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
@@ -388,6 +401,8 @@ cheat.addEventListener("click", (e) => {
 });
 
 reset.addEventListener("click", (e) => {
+  hint.style.display = "none";
+  cheat.style.display = "none"
   clearInterval(gameTimerId);
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
@@ -434,3 +449,29 @@ reset.addEventListener("click", (e) => {
   mapSelect.classList.add("is-focused");
   body.classList.add("bg-img");
 });
+
+// let originalOffsetTopHintButton = hint.offsetTop + 'px';
+// let originalOffsetTopCheatButton = cheat.offsetTop + 'px';
+
+
+
+// visualViewport.addEventListener('resize', function(e) {
+//   /* ... */
+
+//   if (e.target.offsetTop === 0) {
+//     hint.style.top = originalOffsetTopHintButton;
+//     cheat.style.top = originalOffsetTopCheatButton
+//   }
+//   else {
+//     hint.style.top = e.target.offsetTop + 'px';
+//     hint.style.left = e.target.offsetLeft + 'px'
+//     hint.style.right = e.target.offsetRight +'px'
+
+//     cheat.style.top = e.target.offsetTop + 'px';
+//   }
+  
+  
+  
+  
+ 
+// });
