@@ -90,7 +90,7 @@ function showHint() {
 
       //  gameStatus.style.display = "none";
         clearInterval(timerIntervalId);
-        hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
+        hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
         timerCnt = 5;
         toggle = 1;
       }, 5000);
@@ -187,7 +187,7 @@ mapSelect.addEventListener("change", (e) => {
   locationToSelect = allLocations[chosenLocationIdx];
 
   locationLabel.textContent = locationToSelect.toUpperCase();
-  hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
+  hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
   // gameStatus.style.display = "none";
 
   locationLabel.style.color = "dark-grey";
@@ -265,7 +265,7 @@ mapSelect.addEventListener("change", (e) => {
           chosenLocationIdx = Math.floor(Math.random() * count);
           locationToSelect = allLocations[chosenLocationIdx];
           locationLabel.textContent = locationToSelect.toUpperCase();
-          hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
+          hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
         }
       } else {
         if (location.style.fill !== "mediumseagreen") {
@@ -383,7 +383,7 @@ cheat.addEventListener("click", (e) => {
     locationToSelect = allLocations[chosenLocationIdx];
     if (count !== 0) {
       locationLabel.textContent = locationToSelect.toUpperCase();
-      hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
+      hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
     }
   }
 
