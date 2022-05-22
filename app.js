@@ -10,6 +10,7 @@ const hintBeacon = document.createElement("span");
 const modal = document.querySelector(".modal");
 const gameTimerLabel = document.querySelector("#timer");
 const resultTag = document.createElement("span");
+const locationTag = document.createElement("span");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -37,20 +38,36 @@ let timeoutId = null;
 
 let gameTimerId = null;
 
-// let mouseHoldIntervalId;
-// let mouseholdCnt = 0;
+let mouseHoldIntervalId;
+let mouseholdCnt = 0;
 
-// body.addEventListener("mousedown", (e) => {
-//   mouseHoldIntervalId = setInterval(() => {
-//     mouseholdCnt++;
-//     if (mouseholdCnt >= 3) showHint();
-//   }, 1000);
+body.addEventListener("mousedown", (e) => {
+  
 
-//   body.addEventListener("mouseup", (e) => {
-//     clearInterval(mouseHoldIntervalId);
-//     mouseholdCnt = 0;
-//   });
-// });
+  locationTag.style.left = e.x +"px" ;
+  locationTag.style.top = e.y + "px";
+  
+  mouseHoldIntervalId = setInterval(() => {
+    mouseholdCnt++;
+    if (mouseholdCnt >= 3) 
+    
+
+    locationTag.textContent = `${locationToSelect}`;
+    locationTag.classList.add("locationTag", "has-text-dark");
+    body.append(locationTag);
+  
+    
+    
+  }, 1000);
+
+  body.addEventListener("mouseup", (e) => {
+    clearInterval(mouseHoldIntervalId);
+    mouseholdCnt = 0;
+    locationTag.textContent = ``;
+    locationTag.classList.remove("locationTag","has-text-dark");
+    
+  });
+});
 
 function placeItemOnLocation(location, item) {
   itemLocation = location.getBoundingClientRect();
@@ -291,10 +308,15 @@ mapSelect.addEventListener("change", (e) => {
   }
 });
 
+
+
 let keyCountLowC = 0;
 let keyCountLowH = 0;
+let keyCountLowL = 0;
+
 body.addEventListener("keyup", (e) => {
 
+  
   if ( e.key === "h" &&
   !Object.values(modal.classList).includes("is-active") &&
   !cheat.disabled &&
@@ -309,6 +331,7 @@ body.addEventListener("keyup", (e) => {
     showHint();
     hint.disabled = true;
     keyCountLowH = 0;
+
   }
 
   if (
