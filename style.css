@@ -161,8 +161,9 @@ body{
     
     opacity: .8;
 }
-#hint{
-  
+#hint:disabled{
+  /* margin-right: 10px; */
+  animation: shine 2s ease-in-out infinite;
 }
 
 #location{

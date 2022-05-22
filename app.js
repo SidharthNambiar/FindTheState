@@ -291,23 +291,41 @@ mapSelect.addEventListener("change", (e) => {
   }
 });
 
-let keyCount = 0;
+let keyCountLowC = 0;
+let keyCountLowH = 0;
 body.addEventListener("keyup", (e) => {
+
+  if ( e.key === "h" &&
+  !Object.values(modal.classList).includes("is-active") &&
+  !cheat.disabled &&
+  !hint.disabled) {
+    keyCountLowH++;
+  }
+  else {
+    keyCountLowH = 0;
+  }
+
+  if (keyCountLowH === 3) {
+    showHint();
+    hint.disabled = true;
+    keyCountLowH = 0;
+  }
+
   if (
-    e.key === "h" &&
+    e.key === "c" &&
     !Object.values(modal.classList).includes("is-active") &&
     !cheat.disabled &&
     !hint.disabled
   ) {
-    keyCount++;
+    keyCountLowC++;
   } else {
-    keyCount = 0;
+    keyCountLowC = 0;
   }
 
-  if (keyCount === 5 && !hint.disabled) {
+  if (keyCountLowC === 3 && !hint.disabled) {
     hint.style.display = "none";
     cheat.style.display = "none"
-    keyCount = 0;
+    keyCountLowC = 0;
     hint.textContent = "HINT";
     hint.disabled = true;
     cheat.disabled = true;
