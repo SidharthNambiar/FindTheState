@@ -364,8 +364,8 @@ body.addEventListener("click", (e) => {
   }
 });
 
-cheat.addEventListener("click", (e) => {
-  e.stopPropagation();
+function findLocation(e) {
+  // if(e) e.stopPropagation();
   // gameStatus.style.display = "none";
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
@@ -377,9 +377,9 @@ cheat.addEventListener("click", (e) => {
     if (location.dataset.name === locationToSelect) {
       location.style.fill = "mediumseagreen";
     }
-    if (location.style.fill === "rgb(255, 224, 138)") {
-      location.style.fill = "#EBDCC9";
-    }
+    // if (location.style.fill === "rgb(255, 224, 138)") {
+    //   location.style.fill = "#EBDCC9";
+    // }
   }
 
   if (count === 0) {
@@ -416,6 +416,10 @@ cheat.addEventListener("click", (e) => {
     hintBeacon.style.y = "";
     toggle = 1;
   }
+}
+
+cheat.addEventListener("click", (e) => {
+  findLocation(e)
 });
 
 reset.addEventListener("click", (e) => {
@@ -493,3 +497,10 @@ reset.addEventListener("click", (e) => {
   
  
 // });
+
+// setInterval((e) => {
+//   // console.log(cheat.disabled)
+//   if (cheat.style.display !== "none") {
+//     findLocation()
+//   }
+// }, 500);
