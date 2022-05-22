@@ -28,7 +28,7 @@ reset.disabled = true;
 hint.disabled = true;
 cheat.disabled = true;
 
-let timerCnt = 3;
+let timerCnt = 5;
 let timerIntervalId = null;
 let timeoutId = null;
 
@@ -88,9 +88,9 @@ function showHint() {
       //  gameStatus.style.display = "none";
         clearInterval(timerIntervalId);
         hint.textContent = "HINT ( " + locationToSelect.toUpperCase() + " )";
-        timerCnt = 3;
+        timerCnt = 5;
         toggle = 1;
-      }, 3000);
+      }, 5000);
 
       timerIntervalId = setInterval(() => {
       
@@ -170,7 +170,7 @@ mapSelect.addEventListener("change", (e) => {
   allLocations = [];
   for (let location of map) {
     allLocations.push(location.dataset.name);
-    location.style.fill = "white";
+    location.style.fill = "#EBDCC9";
     location.classList.add("js-modal-trigger");
    
   }
@@ -187,6 +187,16 @@ mapSelect.addEventListener("change", (e) => {
   count = allLocations.length;
 
   for (let location of map) {
+
+    location.addEventListener("mouseenter", (e) => {
+      if(location.style.fill !== "mediumseagreen") location.style.fill = "white";
+    })
+
+    location.addEventListener("mouseleave", () => {
+      if(location.style.fill !== "mediumseagreen") location.style.fill = "#EBDCC9";
+    })
+
+   
     location.addEventListener("click", (e) => {
       e.stopPropagation();
 
@@ -196,11 +206,11 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.classList.remove("beacon");
         clearInterval(timerIntervalId);
         clearTimeout(timeoutId);
-        resultTag.classList.remove("wrongTag","has-text-dark");
+        resultTag.classList.remove("wrongTag","has-text-white");
         resultTag.textContent = "";
 
         hint.disabled = false;
-        timerCnt = 3;
+        timerCnt = 5;
         hintLocation = "";
         hintBeacon.style.left = "";
         hintBeacon.style.right = "";
@@ -255,10 +265,10 @@ mapSelect.addEventListener("change", (e) => {
           resultTag.style.left = e.x +"px";
         resultTag.style.top = e.y +"px";
           resultTag.textContent = "WRONG!";
-          resultTag.classList.add("wrongTag", "has-text-dark");
+          resultTag.classList.add("wrongTag", "has-text-white");
           body.append(resultTag);
           setTimeout(() => {
-            resultTag.classList.remove("wrongTag", "has-text-dark");
+            resultTag.classList.remove("wrongTag", "has-text-white");
             resultTag.textContent = "";
           }, 1000);
           //   // location.style.fill = "#ffe08a";
@@ -294,7 +304,7 @@ body.addEventListener("keyup", (e) => {
     clearInterval(gameTimerId);
     gameTimer = 0;
     // clearTimeout(timeoutId)
-    timerCnt = 3;
+    timerCnt = 5;
 
     while (count !== 0) {
       for (let location of map) {
@@ -331,7 +341,7 @@ cheat.addEventListener("click", (e) => {
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
   hint.disabled = false;
-  timerCnt = 3;
+  timerCnt = 5;
 
   count = count - 1;
   for (let location of map) {
@@ -339,7 +349,7 @@ cheat.addEventListener("click", (e) => {
       location.style.fill = "mediumseagreen";
     }
     if (location.style.fill === "rgb(255, 224, 138)") {
-      location.style.fill = "white";
+      location.style.fill = "#EBDCC9";
     }
   }
 
@@ -395,7 +405,7 @@ reset.addEventListener("click", (e) => {
   // gameStatus.style.display = "none";
 
   for (let location of map) {
-    location.style.fill = "white";
+    location.style.fill = "#EBDCC9";
   }
   mapSelect.disabled = false;
   for (let map of maps) {
