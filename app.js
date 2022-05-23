@@ -388,7 +388,7 @@ body.addEventListener("click", (e) => {
 });
 
 function findLocation(e) {
-  // if(e) e.stopPropagation();
+  if(e) e.stopPropagation();
   // gameStatus.style.display = "none";
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
