@@ -80,6 +80,7 @@ MY CSS
 
 
  .wrongTag, .rightTag{
+
   width: fit-content;
   height: fit-content;
   position: fixed;
@@ -103,7 +104,7 @@ MY CSS
 }
 
 
-/* .locationTag{
+.locationTag{
   width: fit-content;
   height: fit-content;
   position: fixed;
@@ -111,11 +112,12 @@ MY CSS
   border-radius: 20px;
   padding-left: 5px;
   padding-right: 5px;
-  opacity: .9;
+  opacity: .7;
   font-weight: bold;
-} */
+} 
 
 .bg-img{
+  
     background-image: url(gael-gaborel-f7I8uEiYkag-unsplash.jpg); 
 
     background-position: center center;

@@ -10,7 +10,7 @@ const hintBeacon = document.createElement("span");
 const modal = document.querySelector(".modal");
 const gameTimerLabel = document.querySelector("#timer");
 const resultTag = document.createElement("span");
-// const locationTag = document.createElement("span");
+const locationTag = document.createElement("span");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -171,7 +171,11 @@ mapSelect.addEventListener("change", (e) => {
     } else {
       // map.hidden = false;
       map.style.display = "";
-      map.classList.add("is-flex","is-flex-direction-row","is-justify-content-center");
+      map.classList.add(
+        "is-flex",
+        "is-flex-direction-row",
+        "is-justify-content-center"
+      );
     }
   }
 
@@ -198,14 +202,30 @@ mapSelect.addEventListener("change", (e) => {
   count = allLocations.length;
 
   for (let location of map) {
+    
+
     location.addEventListener("mouseenter", (e) => {
-      if (location.style.fill !== "mediumseagreen")
+      if (location.style.fill !== "mediumseagreen") {
         location.style.fill = "white";
+      } else if (location.style.fill === "mediumseagreen") {
+        locationTag.style.left = e.x + "px";
+    locationTag.style.top = e.y + "px";
+        locationTag.textContent = `${location.dataset.name}`;
+        locationTag.classList.add("locationTag", "has-text-dark");
+        body.append(locationTag);
+      }
     });
 
     location.addEventListener("mouseleave", () => {
-      if (location.style.fill !== "mediumseagreen")
+      if (location.style.fill !== "mediumseagreen") {
         location.style.fill = "#EBDCC9";
+      }
+      else if (location.style.fill === "mediumseagreen") {
+        locationTag.style.left = null;
+        locationTag.style.top = null;
+        locationTag.textContent = "";
+        locationTag.classList.remove("locationTag", "has-text-dark");
+      }
     });
 
     location.addEventListener("click", (e) => {
@@ -258,7 +278,7 @@ mapSelect.addEventListener("change", (e) => {
         resultTag.style.left = e.x + "px";
         resultTag.style.top = e.y + "px";
 
-        resultTag.textContent = "NOW FIND "+locationToSelect.toUpperCase();
+        resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
         resultTag.classList.add("rightTag", "is-white");
         body.append(resultTag);
 
@@ -266,14 +286,13 @@ mapSelect.addEventListener("change", (e) => {
           resultTag.classList.remove("rightTag", "is-white");
           resultTag.textContent = "";
         }, 1000);
-
       } else {
         if (location.style.fill !== "mediumseagreen") {
           // placeItemOnLocation(location, resultTag);
           resultTag.classList.remove("rightTag", "is-white");
           resultTag.style.left = e.x + "px";
           resultTag.style.top = e.y + "px";
-          resultTag.textContent = "NOT " + locationToSelect.toUpperCase()+ "!";
+          resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
           resultTag.classList.add("wrongTag", "has-text-white");
           body.append(resultTag);
           setTimeout(() => {
