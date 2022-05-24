@@ -478,8 +478,8 @@ reset.addEventListener("click", (e) => {
     map.hidden = true;
   }
   reset.disabled = true;
-  hint.disabled = true;
-  cheat.disabled = true;
+  hint.disabled = false;
+  cheat.disabled = false;
   mapSelect.value = "";
 
   if (mapSelected === "world") {
