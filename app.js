@@ -15,7 +15,7 @@ const resultTag = document.createElement("span");
 let allLocations = [];
 let clickedLocation = null;
 let chosenLocationIdx = null;
-let locationToSelect = null;
+let locationToSelect = "";
 let count = null;
 let clickedLocations = [];
 let mapSelected = "usa";
@@ -28,9 +28,8 @@ let hintLocation = null;
 reset.disabled = true;
 // hint.disabled = true;
 // cheat.disabled = true;
-hint.style.display = "none"
-cheat.style.display = "none"
-
+hint.style.display = "none";
+cheat.style.display = "none";
 
 let timerCnt = 5;
 let timerIntervalId = null;
@@ -42,22 +41,18 @@ let mouseHoldIntervalId;
 let mouseholdCnt = 0;
 
 // body.addEventListener("mousedown", (e) => {
-  
 
 //   locationTag.style.left = e.x +"px" ;
 //   locationTag.style.top = e.y + "px";
-  
+
 //   mouseHoldIntervalId = setInterval(() => {
 //     // mouseholdCnt++;
-//     // // if (mouseholdCnt >= 3) 
-    
+//     // // if (mouseholdCnt >= 3)
 
 //     locationTag.textContent = `${locationToSelect}`;
 //     locationTag.classList.add("locationTag", "has-text-dark");
 //     body.append(locationTag);
-  
-    
-    
+
 //   }, 1000);
 
 //   body.addEventListener("mouseup", (e) => {
@@ -65,24 +60,18 @@ let mouseholdCnt = 0;
 //     mouseholdCnt = 0;
 //     locationTag.textContent = ``;
 //     locationTag.classList.remove("locationTag","has-text-dark");
-    
+
 //   });
 // });
 
-
-
 function placeItemOnLocation(location, item) {
-
- 
-    itemLocation = location.getBoundingClientRect();
-    item.style.left = itemLocation.left + "px";
-    item.style.right = itemLocation.right + "px";
-    item.style.top = itemLocation.top + "px";
-    item.style.bottom = itemLocation.bottom + "px";
-    item.style.x = itemLocation.x + "px";
-    item.style.y = itemLocation.y + "px";
- 
- 
+  itemLocation = location.getBoundingClientRect();
+  item.style.left = itemLocation.left + "px";
+  item.style.right = itemLocation.right + "px";
+  item.style.top = itemLocation.top + "px";
+  item.style.bottom = itemLocation.bottom + "px";
+  item.style.x = itemLocation.x + "px";
+  item.style.y = itemLocation.y + "px";
 }
 
 function showHint() {
@@ -111,17 +100,15 @@ function showHint() {
         hintBeacon.style.x = "";
         hintBeacon.style.y = "";
 
-      //  gameStatus.style.display = "none";
+        //  gameStatus.style.display = "none";
         clearInterval(timerIntervalId);
-        hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
+        hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
         timerCnt = 5;
         toggle = 1;
       }, 5000);
 
       timerIntervalId = setInterval(() => {
-      
         // hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
-
         // timerCnt--;
       }, 1000);
     }
@@ -138,8 +125,6 @@ let secondLabel = 0;
 let secondCount = 0;
 
 let gameTimer = 0;
-
-
 
 mapSelect.addEventListener("change", (e) => {
   hint.style.display = "";
@@ -181,16 +166,13 @@ mapSelect.addEventListener("change", (e) => {
   //Only display the selected map; hide the others
   for (let map of maps) {
     if (map.id !== mapSelected) {
-      map.hidden = true;
+      // map.hidden = true;
+      map.style.display = "none";
     } else {
-      map.hidden = false;
+      // map.hidden = false;
+      map.style.display = "";
+      map.classList.add("is-flex");
     }
-  }
-
-  // Given the large size of the world, in order to display it completely, bulma is-flex is used
-  if (mapSelected === "world") {
-    const div = document.querySelector("#world");
-    div.classList.add("is-flex");
   }
 
   // querying all the paths(locations) within the selected map
@@ -202,7 +184,6 @@ mapSelect.addEventListener("change", (e) => {
     allLocations.push(location.dataset.name);
     location.style.fill = "#EBDCC9";
     location.classList.add("js-modal-trigger");
-   
   }
 
   clickedLocation = null;
@@ -210,23 +191,23 @@ mapSelect.addEventListener("change", (e) => {
   locationToSelect = allLocations[chosenLocationIdx];
 
   locationLabel.textContent = locationToSelect.toUpperCase();
-  hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
+  hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
   // gameStatus.style.display = "none";
 
   locationLabel.style.color = "dark-grey";
   count = allLocations.length;
 
   for (let location of map) {
-
     location.addEventListener("mouseenter", (e) => {
-      if(location.style.fill !== "mediumseagreen") location.style.fill = "white";
-    })
+      if (location.style.fill !== "mediumseagreen")
+        location.style.fill = "white";
+    });
 
     location.addEventListener("mouseleave", () => {
-      if(location.style.fill !== "mediumseagreen") location.style.fill = "#EBDCC9";
-    })
+      if (location.style.fill !== "mediumseagreen")
+        location.style.fill = "#EBDCC9";
+    });
 
-   
     location.addEventListener("click", (e) => {
       e.stopPropagation();
 
@@ -236,8 +217,8 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.classList.remove("beacon");
         clearInterval(timerIntervalId);
         clearTimeout(timeoutId);
-        resultTag.classList.remove("wrongTag","has-text-white");
-        resultTag.textContent = "";
+        resultTag.classList.remove("wrongTag", "has-text-white");
+        // resultTag.textContent = "";
 
         hint.disabled = false;
         timerCnt = 5;
@@ -249,28 +230,13 @@ mapSelect.addEventListener("change", (e) => {
         hintBeacon.style.x = "";
         hintBeacon.style.y = "";
         toggle = 1;
-       
+
         location.style.fill = "mediumseagreen";
         count = count - 1;
-       
-
-        
-        resultTag.style.left = e.x +"px";
-        resultTag.style.top = e.y +"px";
-
-        
-        
-        resultTag.textContent = "RIGHT!";
-        resultTag.classList.add("rightTag", "is-white");
-        body.append(resultTag);
-        setTimeout(() => {
-          resultTag.classList.remove("rightTag", "is-white");
-          resultTag.textContent = "";
-        }, 1000);
 
         if (count === 0) {
           hint.style.display = "none";
-          cheat.style.display = "none"
+          cheat.style.display = "none";
           clearInterval(gameTimerId);
           reset.classList.add("is-focused");
           gameTimer = 0;
@@ -281,55 +247,58 @@ mapSelect.addEventListener("change", (e) => {
           cheat.disabled = true;
           locationLabel.textContent = "";
           // gameStatus.style.display = "none";
-
-         
         } else {
           allLocations.splice(chosenLocationIdx, 1);
           chosenLocationIdx = Math.floor(Math.random() * count);
           locationToSelect = allLocations[chosenLocationIdx];
           locationLabel.textContent = locationToSelect.toUpperCase();
-          hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
+          hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
         }
+
+        resultTag.style.left = e.x + "px";
+        resultTag.style.top = e.y + "px";
+
+        resultTag.textContent = "NOW FIND "+locationToSelect.toUpperCase();
+        resultTag.classList.add("rightTag", "is-white");
+        body.append(resultTag);
+
+        setTimeout(() => {
+          resultTag.classList.remove("rightTag", "is-white");
+          resultTag.textContent = "";
+        }, 1000);
+
       } else {
         if (location.style.fill !== "mediumseagreen") {
           // placeItemOnLocation(location, resultTag);
-          resultTag.classList.remove("rightTag", "is-white")
-          resultTag.style.left = e.x +"px";
-        resultTag.style.top = e.y +"px";
-          resultTag.textContent = "WRONG!";
+          resultTag.classList.remove("rightTag", "is-white");
+          resultTag.style.left = e.x + "px";
+          resultTag.style.top = e.y + "px";
+          resultTag.textContent = "NOT " + locationToSelect.toUpperCase()+ "!";
           resultTag.classList.add("wrongTag", "has-text-white");
           body.append(resultTag);
           setTimeout(() => {
             resultTag.classList.remove("wrongTag", "has-text-white");
             resultTag.textContent = "";
           }, 1000);
-          //   // location.style.fill = "#ffe08a";
-          //   // gameStatus.style.display = "";
-          //   // gameStatus.classList.value = "notification is-warning";
-          //   // gameStatus.textContent = `Incorrect! You selected ${location.dataset.name.toUpperCase()}. Try Again`;
-          //   clickedLocations.push(location);
         }
       }
     });
   }
 });
 
-
-
 let keyCountLowC = 0;
 let keyCountLowH = 0;
 let keyCountLowL = 0;
 
 body.addEventListener("keyup", (e) => {
-
-  
-  if ( e.key === "h" &&
-  !Object.values(modal.classList).includes("is-active") &&
-  !cheat.disabled &&
-  !hint.disabled) {
+  if (
+    e.key === "h" &&
+    !Object.values(modal.classList).includes("is-active") &&
+    !cheat.disabled &&
+    !hint.disabled
+  ) {
     keyCountLowH++;
-  }
-  else {
+  } else {
     keyCountLowH = 0;
   }
 
@@ -337,7 +306,6 @@ body.addEventListener("keyup", (e) => {
     showHint();
     hint.disabled = true;
     keyCountLowH = 0;
-
   }
 
   if (
@@ -353,11 +321,11 @@ body.addEventListener("keyup", (e) => {
 
   if (keyCountLowC === 3 && !hint.disabled) {
     hint.style.display = "none";
-    cheat.style.display = "none"
+    cheat.style.display = "none";
     keyCountLowC = 0;
     hint.textContent = "HINT";
-    hint.disabled = true;
-    cheat.disabled = true;
+    hint.disabled = false;
+    cheat.disabled = false;
     clearInterval(timerIntervalId);
     clearInterval(gameTimerId);
     gameTimer = 0;
@@ -376,14 +344,12 @@ body.addEventListener("keyup", (e) => {
       locationToSelect = allLocations[chosenLocationIdx];
       if (count !== 0)
         locationLabel.textContent = locationToSelect.toUpperCase();
-      
     }
     modal.classList.add("is-active");
 
     locationLabel.textContent = "";
     // gameStatus.style.display = "none";
     reset.classList.add("is-focused");
-   
   }
 });
 
@@ -394,7 +360,7 @@ body.addEventListener("click", (e) => {
 });
 
 function findLocation(e) {
-  if(e) e.stopPropagation();
+  if (e) e.stopPropagation();
   // gameStatus.style.display = "none";
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
@@ -415,22 +381,21 @@ function findLocation(e) {
     clearInterval(gameTimerId);
     hint.textContent = "HINT";
     gameTimer = 0;
-    cheat.disabled = true;
-    hint.disabled = true;
+    cheat.disabled = false;
+    hint.disabled = false;
     locationLabel.textContent = "";
     // gameStatus.style.display = "none";
     modal.classList.add("is-active");
     reset.classList.add("is-focused");
     hint.style.display = "none";
-    cheat.style.display = "none"
-
+    cheat.style.display = "none";
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * count);
     locationToSelect = allLocations[chosenLocationIdx];
     if (count !== 0) {
       locationLabel.textContent = locationToSelect.toUpperCase();
-      hint.textContent = "HINT FOR " + locationToSelect.toUpperCase() ;
+      hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
     }
   }
 
@@ -448,12 +413,12 @@ function findLocation(e) {
 }
 
 cheat.addEventListener("click", (e) => {
-  findLocation(e)
+  findLocation(e);
 });
 
 reset.addEventListener("click", (e) => {
   hint.style.display = "none";
-  cheat.style.display = "none"
+  cheat.style.display = "none";
   clearInterval(gameTimerId);
   clearInterval(timerIntervalId);
   clearTimeout(timeoutId);
@@ -467,25 +432,21 @@ reset.addEventListener("click", (e) => {
   clickedLocations = [];
 
   locationLabel.textContent = "";
-  // gameStatus.textContent = "";
-  // gameStatus.style.display = "none";
 
   for (let location of map) {
     location.style.fill = "#EBDCC9";
   }
   mapSelect.disabled = false;
+
   for (let map of maps) {
-    map.hidden = true;
+    map.classList.remove("is-flex");
+    map.style.display = "none";
   }
   reset.disabled = true;
   hint.disabled = false;
   cheat.disabled = false;
   mapSelect.value = "";
 
-  if (mapSelected === "world") {
-    const div = document.querySelector("#world");
-    div.classList.remove("is-flex");
-  }
   hintBeacon.classList.remove("beacon");
   hintLocation = "";
   hintBeacon.style.left = "";
@@ -504,8 +465,6 @@ reset.addEventListener("click", (e) => {
 // let originalOffsetTopHintButton = hint.offsetTop + 'px';
 // let originalOffsetTopCheatButton = cheat.offsetTop + 'px';
 
-
-
 // visualViewport.addEventListener('resize', function(e) {
 //   /* ... */
 
@@ -520,11 +479,7 @@ reset.addEventListener("click", (e) => {
 
 //     cheat.style.top = e.target.offsetTop + 'px';
 //   }
-  
-  
-  
-  
- 
+
 // });
 
 // setInterval((e) => {
@@ -534,15 +489,10 @@ reset.addEventListener("click", (e) => {
 //   }
 // }, 500);
 
-
 // let scrollTop = 0;
 // document.addEventListener("scroll", (e) => {
 
-
-  
 // })
-
-
 
 // Reference: http://www.html5rocks.com/en/tutorials/speed/animations/
 
@@ -551,9 +501,8 @@ let ticking = false;
 
 function resetHintAtScroll(scrollPos) {
   if (hint.disabled) {
-
-    clearInterval(timerIntervalId)
-    clearTimeout(timeoutId)
+    clearInterval(timerIntervalId);
+    clearTimeout(timeoutId);
     hint.disabled = false;
     hintBeacon.classList.remove("beacon");
     hintLocation = "";
@@ -564,19 +513,18 @@ function resetHintAtScroll(scrollPos) {
     hintBeacon.style.x = "";
     hintBeacon.style.y = "";
 
-
     hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
     timerCnt = 5;
     toggle = 1;
-    showHint()
+    showHint();
   }
 }
 
-document.addEventListener('scroll', function(e) {
+document.addEventListener("scroll", function (e) {
   lastKnownScrollPosition = window.scrollY;
 
   if (!ticking) {
-    window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(function () {
       resetHintAtScroll(lastKnownScrollPosition);
       ticking = false;
     });
