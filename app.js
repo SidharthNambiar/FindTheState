@@ -535,8 +535,21 @@ reset.addEventListener("click", (e) => {
 // }, 500);
 
 
-let scrollTop = 0;
-document.addEventListener("scroll", (e) => {
+// let scrollTop = 0;
+// document.addEventListener("scroll", (e) => {
+
+
+  
+// })
+
+
+
+// Reference: http://www.html5rocks.com/en/tutorials/speed/animations/
+
+let lastKnownScrollPosition = 0;
+let ticking = false;
+
+function resetHintAtScroll(scrollPos) {
   if (hint.disabled) {
 
     clearInterval(timerIntervalId)
@@ -557,6 +570,17 @@ document.addEventListener("scroll", (e) => {
     toggle = 1;
     showHint()
   }
+}
 
-  
-})
+document.addEventListener('scroll', function(e) {
+  lastKnownScrollPosition = window.scrollY;
+
+  if (!ticking) {
+    window.requestAnimationFrame(function() {
+      resetHintAtScroll(lastKnownScrollPosition);
+      ticking = false;
+    });
+
+    ticking = true;
+  }
+});
