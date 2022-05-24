@@ -10,7 +10,7 @@ const hintBeacon = document.createElement("span");
 const modal = document.querySelector(".modal");
 const gameTimerLabel = document.querySelector("#timer");
 const resultTag = document.createElement("span");
-const locationTag = document.createElement("span");
+// const locationTag = document.createElement("span");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -41,42 +41,48 @@ let gameTimerId = null;
 let mouseHoldIntervalId;
 let mouseholdCnt = 0;
 
-body.addEventListener("mousedown", (e) => {
+// body.addEventListener("mousedown", (e) => {
   
 
-  locationTag.style.left = e.x +"px" ;
-  locationTag.style.top = e.y + "px";
+//   locationTag.style.left = e.x +"px" ;
+//   locationTag.style.top = e.y + "px";
   
-  mouseHoldIntervalId = setInterval(() => {
-    mouseholdCnt++;
-    if (mouseholdCnt >= 3) 
+//   mouseHoldIntervalId = setInterval(() => {
+//     // mouseholdCnt++;
+//     // // if (mouseholdCnt >= 3) 
     
 
-    locationTag.textContent = `${locationToSelect}`;
-    locationTag.classList.add("locationTag", "has-text-dark");
-    body.append(locationTag);
+//     locationTag.textContent = `${locationToSelect}`;
+//     locationTag.classList.add("locationTag", "has-text-dark");
+//     body.append(locationTag);
   
     
     
-  }, 1000);
+//   }, 1000);
 
-  body.addEventListener("mouseup", (e) => {
-    clearInterval(mouseHoldIntervalId);
-    mouseholdCnt = 0;
-    locationTag.textContent = ``;
-    locationTag.classList.remove("locationTag","has-text-dark");
+//   body.addEventListener("mouseup", (e) => {
+//     clearInterval(mouseHoldIntervalId);
+//     mouseholdCnt = 0;
+//     locationTag.textContent = ``;
+//     locationTag.classList.remove("locationTag","has-text-dark");
     
-  });
-});
+//   });
+// });
+
+
 
 function placeItemOnLocation(location, item) {
-  itemLocation = location.getBoundingClientRect();
-  item.style.left = itemLocation.left + "px";
-  item.style.right = itemLocation.right + "px";
-  item.style.top = itemLocation.top + "px";
-  item.style.bottom = itemLocation.bottom + "px";
-  item.style.x = itemLocation.x + "px";
-  item.style.y = itemLocation.y + "px";
+
+ 
+    itemLocation = location.getBoundingClientRect();
+    item.style.left = itemLocation.left + "px";
+    item.style.right = itemLocation.right + "px";
+    item.style.top = itemLocation.top + "px";
+    item.style.bottom = itemLocation.bottom + "px";
+    item.style.x = itemLocation.x + "px";
+    item.style.y = itemLocation.y + "px";
+ 
+ 
 }
 
 function showHint() {
@@ -88,8 +94,8 @@ function showHint() {
 
       hintBeacon.classList.add("beacon");
 
-      hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
-      timerCnt--;
+      // hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+      // timerCnt--;
       toggle = 0;
 
       body.append(hintBeacon);
@@ -114,9 +120,9 @@ function showHint() {
 
       timerIntervalId = setInterval(() => {
       
-        hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
+        // hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
 
-        timerCnt--;
+        // timerCnt--;
       }, 1000);
     }
   }
@@ -527,3 +533,30 @@ reset.addEventListener("click", (e) => {
 //     findLocation()
 //   }
 // }, 500);
+
+
+let scrollTop = 0;
+document.addEventListener("scroll", (e) => {
+  if (hint.disabled) {
+
+    clearInterval(timerIntervalId)
+    clearTimeout(timeoutId)
+    hint.disabled = false;
+    hintBeacon.classList.remove("beacon");
+    hintLocation = "";
+    hintBeacon.style.left = "";
+    hintBeacon.style.right = "";
+    hintBeacon.style.top = "";
+    hintBeacon.style.bottom = "";
+    hintBeacon.style.x = "";
+    hintBeacon.style.y = "";
+
+
+    hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+    timerCnt = 5;
+    toggle = 1;
+    showHint()
+  }
+
+  
+})
