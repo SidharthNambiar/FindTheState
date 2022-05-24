@@ -171,7 +171,7 @@ mapSelect.addEventListener("change", (e) => {
     } else {
       // map.hidden = false;
       map.style.display = "";
-      map.classList.add("is-flex");
+      map.classList.add("is-flex","is-flex-direction-row","is-justify-content-center");
     }
   }
 
