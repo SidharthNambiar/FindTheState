@@ -1,7 +1,6 @@
 const mapSelect = document.querySelector("#mapSelect");
 const maps = document.querySelectorAll(".maps");
 const locationLabel = document.querySelector("#location");
-// const gameStatus = document.querySelector("#status");
 const reset = document.querySelector("#reset");
 const hint = document.querySelector("#hint");
 const cheat = document.querySelector("#cheat");
@@ -16,120 +15,119 @@ let allLocations = [];
 let clickedLocation = null;
 let chosenLocationIdx = null;
 let locationToSelect = "";
-let count = null;
+let numberOfLocations = null;
 let clickedLocations = [];
-let mapSelected = "usa";
-let toggle = 1;
-let map = document.querySelectorAll(`#${mapSelected} path`);
-let hintLocation = null;
-
-// gameStatus.style.display = "none";
-
-reset.disabled = true;
-// hint.disabled = true;
-// cheat.disabled = true;
-hint.style.display = "none";
-cheat.style.display = "none";
-
-let timerCnt = 5;
-let timerIntervalId = null;
-let timeoutId = null;
-
+let mapSelectedByUser = "usa";
+let isBeaconOff = true;
+let map = null;
+let locationsWithWideStroke = [];
+let strokeWidthVal = null;
+let hintTimeoutId = null;
 let gameTimerId = null;
-
-let mouseHoldIntervalId;
-let mouseholdCnt = 0;
-
-// body.addEventListener("mousedown", (e) => {
-
-//   locationTag.style.left = e.x +"px" ;
-//   locationTag.style.top = e.y + "px";
-
-//   mouseHoldIntervalId = setInterval(() => {
-//     // mouseholdCnt++;
-//     // // if (mouseholdCnt >= 3)
-
-//     locationTag.textContent = `${locationToSelect}`;
-//     locationTag.classList.add("locationTag", "has-text-dark");
-//     body.append(locationTag);
-
-//   }, 1000);
-
-//   body.addEventListener("mouseup", (e) => {
-//     clearInterval(mouseHoldIntervalId);
-//     mouseholdCnt = 0;
-//     locationTag.textContent = ``;
-//     locationTag.classList.remove("locationTag","has-text-dark");
-
-//   });
-// });
-
-function placeItemOnLocation(location, item) {
-  itemLocation = location.getBoundingClientRect();
-  item.style.left = itemLocation.left + "px";
-  item.style.right = itemLocation.right + "px";
-  item.style.top = itemLocation.top + "px";
-  item.style.bottom = itemLocation.bottom + "px";
-  item.style.x = itemLocation.x + "px";
-  item.style.y = itemLocation.y + "px";
-}
-
-function showHint() {
-  hint.disabled = true;
-
-  for (let location of map) {
-    if (locationToSelect === location.dataset.name) {
-      placeItemOnLocation(location, hintBeacon);
-
-      hintBeacon.classList.add("beacon");
-
-      // hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
-      // timerCnt--;
-      toggle = 0;
-
-      body.append(hintBeacon);
-
-      timeoutId = setTimeout(() => {
-        hint.disabled = false;
-        hintBeacon.classList.remove("beacon");
-        hintLocation = "";
-        hintBeacon.style.left = "";
-        hintBeacon.style.right = "";
-        hintBeacon.style.top = "";
-        hintBeacon.style.bottom = "";
-        hintBeacon.style.x = "";
-        hintBeacon.style.y = "";
-
-        //  gameStatus.style.display = "none";
-        clearInterval(timerIntervalId);
-        hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
-        timerCnt = 5;
-        toggle = 1;
-      }, 5000);
-
-      timerIntervalId = setInterval(() => {
-        // hint.textContent = `HINT COUNTDOWN: ${timerCnt}`;
-        // timerCnt--;
-      }, 1000);
-    }
-  }
-}
-
-hint.addEventListener("click", (e) => {
-  showHint();
-});
-
 let minuteLabel = 0;
 let minuteCount = 0;
 let secondLabel = 0;
 let secondCount = 0;
-
 let gameTimer = 0;
+let keyCountLowC = 0;
+let keyCountLowH = 0;
+let keyCountLowL = 0;
+let lastKnownScrollPosition = 0;
+let ticking = false;
 
-mapSelect.addEventListener("change", (e) => {
+// let mouseHoldIntervalId;
+// let mouseholdCnt = 0;
+
+reset.disabled = true;
+hint.style.display = "none";
+cheat.style.display = "none";
+
+function placeItemOnLocation(location, item) {
+  itemLocation = location.getBoundingClientRect();
+  item.style.left = itemLocation.left + "px";
+  item.style.top = itemLocation.top + "px";
+}
+
+function showHint() {
+  hint.disabled = true;
+  for (let location of map) {
+    if (locationToSelect === location.dataset.name) {
+      placeItemOnLocation(location, hintBeacon);
+      hintBeacon.classList.add("beacon");
+      isBeaconOff = false;
+      body.append(hintBeacon);
+
+      hintTimeoutId = setTimeout(() => {
+        hint.disabled = false;
+        hintBeacon.classList.remove("beacon");
+        hintBeacon.style.left = "";
+        hintBeacon.style.top = "";
+
+        hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+        isBeaconOff = true;
+      }, 5000);
+    }
+  }
+}
+
+function gameplayInit() {
   hint.style.display = "";
   cheat.style.display = "";
   body.classList.remove("bg-img");
+  reset.disabled = false;
+  hint.disabled = false;
+  cheat.disabled = false;
+  locationLabel.textContent = "";
+  gameTimerLabel.style.textContent = "";
+  mapSelectedByUser = mapSelect.value;
+  mapSelect.disabled = true;
+
+  //Only display the selected map; hide the others
+  for (let map of maps) {
+    if (map.id !== mapSelectedByUser) {
+      map.style.display = "none";
+    } else {
+      map.style.display = "";
+      map.classList.add(
+        "is-flex",
+        "is-flex-direction-row",
+        "is-justify-content-center"
+      );
+    }
+  }
+
+  // querying all the paths(locations) within the selected map
+  map = document.querySelectorAll(`#${mapSelectedByUser} path`);
+
+  // extracting the names of all the locations and putting them in a an array called allLocations
+  allLocations = [];
+
+  for (let location of map) {
+    allLocations.push(location.dataset.name);
+    location.style.fill = "#EBDCC9";
+    location.classList.add("js-modal-trigger");
+
+    strokeWidthVal = parseFloat(location.style.strokeWidth);
+    if (strokeWidthVal > 1) {
+      locationsWithWideStroke.push(location.dataset.name);
+      location.style.opacity = "0.5";
+    }
+
+    location.style.cursor = "crosshair";
+  }
+
+  clickedLocation = null;
+  chosenLocationIdx = Math.floor(Math.random() * allLocations.length - 1);
+  locationToSelect = allLocations[chosenLocationIdx];
+
+  locationLabel.textContent = locationToSelect.toUpperCase();
+  hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+
+  locationLabel.style.color = "dark-grey";
+  numberOfLocations = allLocations.length;
+}
+
+function setGameTimer() {
   gameTimerLabel.textContent = "00:00";
   gameTimerId = setInterval(() => {
     gameTimer++;
@@ -154,162 +152,158 @@ mapSelect.addEventListener("change", (e) => {
 
     gameTimerLabel.textContent = `${minuteLabel}:${secondLabel}`;
   }, 1000);
+}
 
-  reset.disabled = false;
-  hint.disabled = false;
-  cheat.disabled = false;
-  locationLabel.textContent = "";
-  gameTimerLabel.style.textContent = "";
-  mapSelected = mapSelect.value;
-  mapSelect.disabled = true;
+function mouseEnterConfig(location, e) {
+  if (location.style.fill !== "mediumseagreen") {
+    location.style.fill = "white";
+  } else if (location.style.fill === "mediumseagreen") {
+    locationTag.style.left = e.x + "px";
+    locationTag.style.top = e.y + "px";
+    locationTag.textContent = `${location.dataset.name}`;
+    locationTag.classList.add("locationTag", "has-text-dark");
+    body.append(locationTag);
+  }
 
-  //Only display the selected map; hide the others
-  for (let map of maps) {
-    if (map.id !== mapSelected) {
-      // map.hidden = true;
-      map.style.display = "none";
-    } else {
-      // map.hidden = false;
-      map.style.display = "";
-      map.classList.add(
-        "is-flex",
-        "is-flex-direction-row",
-        "is-justify-content-center"
+  if (locationsWithWideStroke.includes(location.dataset.name)) {
+    location.style.opacity = "1";
+  }
+}
+
+function mouseLeaveConfig(location, e) {
+  if (location.style.fill !== "mediumseagreen") {
+    location.style.fill = "#EBDCC9";
+    if (locationsWithWideStroke.includes(location.dataset.name)) {
+      location.style.opacity = "0.5";
+    }
+  } else if (location.style.fill === "mediumseagreen") {
+    locationTag.style.left = null;
+    locationTag.style.top = null;
+    locationTag.textContent = "";
+    locationTag.classList.remove("locationTag", "has-text-dark");
+  }
+}
+
+function processMouseClickOnLoation(location, e) {
+  clickedLocation = location.dataset.name;
+
+  if (clickedLocation === locationToSelect) {
+    if (locationsWithWideStroke.includes(clickedLocation)) {
+      location.style.strokeWidth = String(strokeWidthVal / 5);
+      locationsWithWideStroke.splice(
+        locationsWithWideStroke.indexOf(location.dataset.name),
+        1
       );
     }
-  }
+    hintBeacon.classList.remove("beacon");
+    clearTimeout(hintTimeoutId);
+    resultTag.classList.remove("wrongTag", "has-text-white");
+    // resultTag.textContent = "";
 
-  // querying all the paths(locations) within the selected map
-  map = document.querySelectorAll(`#${mapSelected} path`);
+    hint.disabled = false;
+    hintBeacon.style.left = "";
+    hintBeacon.style.top = "";
+    isBeaconOff = true;
 
-  // extracting the names of all the locations and putting them in a an array called allLocations
-  allLocations = [];
-  for (let location of map) {
-    allLocations.push(location.dataset.name);
-    location.style.fill = "#EBDCC9";
-    location.classList.add("js-modal-trigger");
-  }
+    location.style.fill = "mediumseagreen";
+    numberOfLocations = numberOfLocations - 1;
 
-  clickedLocation = null;
-  chosenLocationIdx = Math.floor(Math.random() * allLocations.length - 1);
-  locationToSelect = allLocations[chosenLocationIdx];
+    if (numberOfLocations === 0) {
+      hint.style.display = "none";
+      cheat.style.display = "none";
+      clearInterval(gameTimerId);
+      reset.classList.add("is-focused");
+      gameTimer = 0;
+      modal.classList.add("is-active");
+      // hint.disabled && cheat.disabled;
+      hint.textContent = "HINT";
+      hint.disabled = true;
+      cheat.disabled = true;
+      locationLabel.textContent = "";
+    } else {
+      allLocations.splice(chosenLocationIdx, 1);
+      chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
+      locationToSelect = allLocations[chosenLocationIdx];
+      locationLabel.textContent = locationToSelect.toUpperCase();
+      hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+    }
 
-  locationLabel.textContent = locationToSelect.toUpperCase();
-  hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
-  // gameStatus.style.display = "none";
+    resultTag.style.left = e.x + "px";
+    resultTag.style.top = e.y + "px";
 
-  locationLabel.style.color = "dark-grey";
-  count = allLocations.length;
+    resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
+    resultTag.classList.add("rightTag", "is-white");
+    body.append(resultTag);
 
-  for (let location of map) {
-    
-
-    location.addEventListener("mouseenter", (e) => {
-      if (location.style.fill !== "mediumseagreen") {
-        location.style.fill = "white";
-      } else if (location.style.fill === "mediumseagreen") {
-        locationTag.style.left = e.x + "px";
-    locationTag.style.top = e.y + "px";
-        locationTag.textContent = `${location.dataset.name}`;
-        locationTag.classList.add("locationTag", "has-text-dark");
-        body.append(locationTag);
-      }
-    });
-
-    location.addEventListener("mouseleave", () => {
-      if (location.style.fill !== "mediumseagreen") {
-        location.style.fill = "#EBDCC9";
-      }
-      else if (location.style.fill === "mediumseagreen") {
-        locationTag.style.left = null;
-        locationTag.style.top = null;
-        locationTag.textContent = "";
-        locationTag.classList.remove("locationTag", "has-text-dark");
-      }
-    });
-
-    location.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      clickedLocation = location.dataset.name;
-
-      if (clickedLocation === locationToSelect) {
-        hintBeacon.classList.remove("beacon");
-        clearInterval(timerIntervalId);
-        clearTimeout(timeoutId);
+    setTimeout(() => {
+      resultTag.classList.remove("rightTag", "is-white");
+      resultTag.textContent = "";
+    }, 1000);
+  } else {
+    if (location.style.fill !== "mediumseagreen") {
+      resultTag.classList.remove("rightTag", "is-white");
+      resultTag.style.left = e.x + "px";
+      resultTag.style.top = e.y + "px";
+      resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
+      resultTag.classList.add("wrongTag", "has-text-white");
+      body.append(resultTag);
+      setTimeout(() => {
         resultTag.classList.remove("wrongTag", "has-text-white");
-        // resultTag.textContent = "";
-
-        hint.disabled = false;
-        timerCnt = 5;
-        hintLocation = "";
-        hintBeacon.style.left = "";
-        hintBeacon.style.right = "";
-        hintBeacon.style.top = "";
-        hintBeacon.style.bottom = "";
-        hintBeacon.style.x = "";
-        hintBeacon.style.y = "";
-        toggle = 1;
-
-        location.style.fill = "mediumseagreen";
-        count = count - 1;
-
-        if (count === 0) {
-          hint.style.display = "none";
-          cheat.style.display = "none";
-          clearInterval(gameTimerId);
-          reset.classList.add("is-focused");
-          gameTimer = 0;
-          modal.classList.add("is-active");
-          // hint.disabled && cheat.disabled;
-          hint.textContent = "HINT";
-          hint.disabled = true;
-          cheat.disabled = true;
-          locationLabel.textContent = "";
-          // gameStatus.style.display = "none";
-        } else {
-          allLocations.splice(chosenLocationIdx, 1);
-          chosenLocationIdx = Math.floor(Math.random() * count);
-          locationToSelect = allLocations[chosenLocationIdx];
-          locationLabel.textContent = locationToSelect.toUpperCase();
-          hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
-        }
-
-        resultTag.style.left = e.x + "px";
-        resultTag.style.top = e.y + "px";
-
-        resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
-        resultTag.classList.add("rightTag", "is-white");
-        body.append(resultTag);
-
-        setTimeout(() => {
-          resultTag.classList.remove("rightTag", "is-white");
-          resultTag.textContent = "";
-        }, 1000);
-      } else {
-        if (location.style.fill !== "mediumseagreen") {
-          // placeItemOnLocation(location, resultTag);
-          resultTag.classList.remove("rightTag", "is-white");
-          resultTag.style.left = e.x + "px";
-          resultTag.style.top = e.y + "px";
-          resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
-          resultTag.classList.add("wrongTag", "has-text-white");
-          body.append(resultTag);
-          setTimeout(() => {
-            resultTag.classList.remove("wrongTag", "has-text-white");
-            resultTag.textContent = "";
-          }, 1000);
-        }
-      }
-    });
+        resultTag.textContent = "";
+      }, 1000);
+    }
   }
+}
+
+function resetGame() {
+  hint.style.display = "none";
+  cheat.style.display = "none";
+  clearInterval(gameTimerId);
+  clearTimeout(hintTimeoutId);
+  hint.textContent = "HINT";
+  minuteCount = 0;
+  secondCount = 0;
+  gameTimer = 0;
+  gameTimerLabel.textContent = "";
+  allLocations = allLocations.slice();
+  clickedLocation = null;
+  clickedLocations = [];
+
+  locationLabel.textContent = "";
+
+  for (let location of map) {
+    location.style.fill = "#EBDCC9";
+    if (locationsWithWideStroke.includes(location.dataset.name)) {
+      strokeWidth = parseFloat(location.style.strokeWidth);
+      location.style.strokeWidth = String(strokeWidth + 5);
+    }
+  }
+  mapSelect.disabled = false;
+
+  for (let map of maps) {
+    map.classList.remove("is-flex");
+    map.style.display = "none";
+  }
+  reset.disabled = true;
+  hint.disabled = false;
+  cheat.disabled = false;
+  mapSelect.value = "";
+
+  hintBeacon.classList.remove("beacon");
+  hintBeacon.style.left = "";
+  hintBeacon.style.top = "";
+  hintBeacon.remove();
+
+  mapSelect.classList.add("is-focused");
+  body.classList.add("bg-img");
+  locationsWithWideStroke = [];
+}
+
+hint.addEventListener("click", (e) => {
+  showHint();
 });
 
-let keyCountLowC = 0;
-let keyCountLowH = 0;
-let keyCountLowL = 0;
-
-body.addEventListener("keyup", (e) => {
+function processKeyboardEventKeyUp(e) {
   if (
     e.key === "h" &&
     !Object.values(modal.classList).includes("is-active") &&
@@ -345,48 +339,40 @@ body.addEventListener("keyup", (e) => {
     hint.textContent = "HINT";
     hint.disabled = false;
     cheat.disabled = false;
-    clearInterval(timerIntervalId);
     clearInterval(gameTimerId);
     gameTimer = 0;
-    // clearTimeout(timeoutId)
-    timerCnt = 5;
+    // clearTimeout(hintTimeoutId)
 
-    while (count !== 0) {
+    while (numberOfLocations !== 0) {
       for (let location of map) {
         if (location.dataset.name === locationToSelect) {
           location.style.fill = "mediumseagreen";
         }
+        if (locationsWithWideStroke.includes(location.dataset.name)) {
+          location.style.strokeWidth = String(strokeWidthVal / 5);
+          // locationsWithWideStroke.splice(locationsWithWideStroke.indexOf(location.dataset.name),1)
+        }
       }
-      count = count - 1;
+      numberOfLocations = numberOfLocations - 1;
       allLocations.splice(allLocations.indexOf(locationToSelect), 1);
-      chosenLocationIdx = Math.floor(Math.random() * count);
+      chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
       locationToSelect = allLocations[chosenLocationIdx];
-      if (count !== 0)
+      if (numberOfLocations !== 0)
         locationLabel.textContent = locationToSelect.toUpperCase();
     }
     modal.classList.add("is-active");
 
     locationLabel.textContent = "";
-    // gameStatus.style.display = "none";
     reset.classList.add("is-focused");
   }
-});
-
-body.addEventListener("click", (e) => {
-  if (Object.values(modal.classList).includes("is-active")) {
-    modal.classList.remove("is-active");
-  }
-});
+}
 
 function findLocation(e) {
-  if (e) e.stopPropagation();
-  // gameStatus.style.display = "none";
-  clearInterval(timerIntervalId);
-  clearTimeout(timeoutId);
+  e.stopPropagation();
+  clearTimeout(hintTimeoutId);
   hint.disabled = false;
-  timerCnt = 5;
 
-  count = count - 1;
+  numberOfLocations = numberOfLocations - 1;
   for (let location of map) {
     if (location.dataset.name === locationToSelect) {
       location.style.fill = "mediumseagreen";
@@ -396,90 +382,127 @@ function findLocation(e) {
     // }
   }
 
-  if (count === 0) {
+  if (numberOfLocations === 0) {
     clearInterval(gameTimerId);
     hint.textContent = "HINT";
     gameTimer = 0;
     cheat.disabled = false;
     hint.disabled = false;
     locationLabel.textContent = "";
-    // gameStatus.style.display = "none";
     modal.classList.add("is-active");
     reset.classList.add("is-focused");
     hint.style.display = "none";
     cheat.style.display = "none";
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
-    chosenLocationIdx = Math.floor(Math.random() * count);
+    chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
     locationToSelect = allLocations[chosenLocationIdx];
-    if (count !== 0) {
+    if (numberOfLocations !== 0) {
       locationLabel.textContent = locationToSelect.toUpperCase();
       hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
     }
   }
 
-  if (!toggle) {
+  if (!isBeaconOff) {
     hintBeacon.classList.remove("beacon");
-    hintLocation = "";
     hintBeacon.style.left = "";
-    hintBeacon.style.right = "";
     hintBeacon.style.top = "";
-    hintBeacon.style.bottom = "";
-    hintBeacon.style.x = "";
-    hintBeacon.style.y = "";
-    toggle = 1;
+    isBeaconOff = true;
   }
 }
+
+function resetHintAtScroll(scrollPos) {
+  if (hint.disabled) {
+    clearTimeout(hintTimeoutId);
+    hint.disabled = false;
+    hintBeacon.classList.remove("beacon");
+    hintBeacon.style.left = "";
+    hintBeacon.style.top = "";
+
+    hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+    isBeaconOff = true;
+    showHint();
+  }
+}
+
+function removeModal() {
+  if (Object.values(modal.classList).includes("is-active")) {
+    modal.classList.remove("is-active");
+  }
+}
+
+mapSelect.addEventListener("change", (e) => {
+  gameplayInit();
+  setGameTimer();
+
+  for (let location of map) {
+    location.addEventListener("mouseenter", (e) => {
+      mouseEnterConfig(location, e);
+    });
+
+    location.addEventListener("mouseleave", (e) => {
+      mouseLeaveConfig(location, e);
+    });
+
+    location.addEventListener("click", (e) => {
+      e.stopPropagation();
+      processMouseClickOnLoation(location, e);
+    });
+  }
+});
+
+body.addEventListener("keyup", (e) => {
+  processKeyboardEventKeyUp(e);
+});
+
+body.addEventListener("click", (e) => {
+  removeModal(e);
+});
 
 cheat.addEventListener("click", (e) => {
   findLocation(e);
 });
 
 reset.addEventListener("click", (e) => {
-  hint.style.display = "none";
-  cheat.style.display = "none";
-  clearInterval(gameTimerId);
-  clearInterval(timerIntervalId);
-  clearTimeout(timeoutId);
-  hint.textContent = "HINT";
-  minuteCount = 0;
-  secondCount = 0;
-  gameTimer = 0;
-  gameTimerLabel.textContent = "";
-  allLocations = allLocations.slice();
-  clickedLocation = null;
-  clickedLocations = [];
-
-  locationLabel.textContent = "";
-
-  for (let location of map) {
-    location.style.fill = "#EBDCC9";
-  }
-  mapSelect.disabled = false;
-
-  for (let map of maps) {
-    map.classList.remove("is-flex");
-    map.style.display = "none";
-  }
-  reset.disabled = true;
-  hint.disabled = false;
-  cheat.disabled = false;
-  mapSelect.value = "";
-
-  hintBeacon.classList.remove("beacon");
-  hintLocation = "";
-  hintBeacon.style.left = "";
-  hintBeacon.style.right = "";
-  hintBeacon.style.top = "";
-  hintBeacon.style.bottom = "";
-  hintBeacon.style.x = "";
-  hintBeacon.style.y = "";
-
-  hintBeacon.remove();
-
-  mapSelect.classList.add("is-focused");
-  body.classList.add("bg-img");
+  resetGame(e);
 });
+
+document.addEventListener("scroll", function (e) {
+  lastKnownScrollPosition = window.scrollY;
+
+  if (!ticking) {
+    window.requestAnimationFrame(function () {
+      resetHintAtScroll(lastKnownScrollPosition);
+      ticking = false;
+    });
+
+    ticking = true;
+  }
+});
+
+// body.addEventListener("mousedown", (e) => {
+
+//   locationTag.style.left = e.x +"px" ;
+//   locationTag.style.top = e.y + "px";
+
+//   mouseHoldIntervalId = setInterval(() => {
+//     // mouseholdCnt++;
+//     // // if (mouseholdCnt >= 3)
+
+//     locationTag.textContent = `${locationToSelect}`;
+//     locationTag.classList.add("locationTag", "has-text-dark");
+//     body.append(locationTag);
+
+//   }, 1000);
+
+//   body.addEventListener("mouseup", (e) => {
+//     clearInterval(mouseHoldIntervalId);
+//     mouseholdCnt = 0;
+//     locationTag.textContent = ``;
+//     locationTag.classList.remove("locationTag","has-text-dark");
+
+//   });
+// });
 
 // let originalOffsetTopHintButton = hint.offsetTop + 'px';
 // let originalOffsetTopCheatButton = cheat.offsetTop + 'px';
@@ -512,42 +535,3 @@ reset.addEventListener("click", (e) => {
 // document.addEventListener("scroll", (e) => {
 
 // })
-
-// Reference: http://www.html5rocks.com/en/tutorials/speed/animations/
-
-let lastKnownScrollPosition = 0;
-let ticking = false;
-
-function resetHintAtScroll(scrollPos) {
-  if (hint.disabled) {
-    clearInterval(timerIntervalId);
-    clearTimeout(timeoutId);
-    hint.disabled = false;
-    hintBeacon.classList.remove("beacon");
-    hintLocation = "";
-    hintBeacon.style.left = "";
-    hintBeacon.style.right = "";
-    hintBeacon.style.top = "";
-    hintBeacon.style.bottom = "";
-    hintBeacon.style.x = "";
-    hintBeacon.style.y = "";
-
-    hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
-    timerCnt = 5;
-    toggle = 1;
-    showHint();
-  }
-}
-
-document.addEventListener("scroll", function (e) {
-  lastKnownScrollPosition = window.scrollY;
-
-  if (!ticking) {
-    window.requestAnimationFrame(function () {
-      resetHintAtScroll(lastKnownScrollPosition);
-      ticking = false;
-    });
-
-    ticking = true;
-  }
-});
