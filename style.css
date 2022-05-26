@@ -81,6 +81,9 @@ MY CSS
 
  .wrongTag, .rightTag{
 
+  
+  
+
   width: fit-content;
   height: fit-content;
   position: fixed;
@@ -90,6 +93,8 @@ MY CSS
   opacity: .9;
   color: white;
   font-weight: bold;
+  
+
 }
 
 .rightTag{

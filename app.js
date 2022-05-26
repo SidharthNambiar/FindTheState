@@ -34,6 +34,8 @@ let keyCountLowH = 0;
 let keyCountLowL = 0;
 let lastKnownScrollPosition = 0;
 let ticking = false;
+let innerWidth = window.innerWidth;
+let middleWindow = innerWidth / 2;
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -41,6 +43,9 @@ let ticking = false;
 reset.disabled = true;
 hint.style.display = "none";
 cheat.style.display = "none";
+body.append(resultTag);
+body.append(hintBeacon);
+body.append(locationTag);
 
 function placeItemOnLocation(location, item) {
   itemLocation = location.getBoundingClientRect();
@@ -55,7 +60,6 @@ function showHint() {
       placeItemOnLocation(location, hintBeacon);
       hintBeacon.classList.add("beacon");
       isBeaconOff = false;
-      body.append(hintBeacon);
 
       hintTimeoutId = setTimeout(() => {
         hint.disabled = false;
@@ -158,11 +162,16 @@ function mouseEnterConfig(location, e) {
   if (location.style.fill !== "mediumseagreen") {
     location.style.fill = "white";
   } else if (location.style.fill === "mediumseagreen") {
-    locationTag.style.left = e.x + "px";
-    locationTag.style.top = e.y + "px";
     locationTag.textContent = `${location.dataset.name}`;
     locationTag.classList.add("locationTag", "has-text-dark");
-    body.append(locationTag);
+    if (e.x > middleWindow) {
+      console.log(e.x);
+      locationTag.style.left = e.x - locationTag.scrollWidth + "px";
+    } else {
+      locationTag.style.left = e.x + "px";
+    }
+
+    locationTag.style.top = e.y + "px";
   }
 
   if (locationsWithWideStroke.includes(location.dataset.name)) {
@@ -215,7 +224,6 @@ function processMouseClickOnLoation(location, e) {
       reset.classList.add("is-focused");
       gameTimer = 0;
       modal.classList.add("is-active");
-      // hint.disabled && cheat.disabled;
       hint.textContent = "HINT";
       hint.disabled = true;
       cheat.disabled = true;
@@ -228,12 +236,16 @@ function processMouseClickOnLoation(location, e) {
       hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
     }
 
-    resultTag.style.left = e.x + "px";
-    resultTag.style.top = e.y + "px";
-
     resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
     resultTag.classList.add("rightTag", "is-white");
-    body.append(resultTag);
+
+    if (e.x > middleWindow) {
+      resultTag.style.left = e.x - resultTag.scrollWidth + "px";
+    } else {
+      resultTag.style.left = e.x + "px";
+    }
+
+    resultTag.style.top = e.y + "px";
 
     setTimeout(() => {
       resultTag.classList.remove("rightTag", "is-white");
@@ -242,11 +254,18 @@ function processMouseClickOnLoation(location, e) {
   } else {
     if (location.style.fill !== "mediumseagreen") {
       resultTag.classList.remove("rightTag", "is-white");
-      resultTag.style.left = e.x + "px";
-      resultTag.style.top = e.y + "px";
+
       resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
       resultTag.classList.add("wrongTag", "has-text-white");
-      body.append(resultTag);
+
+      if (e.x > middleWindow) {
+        resultTag.style.left = e.x - resultTag.scrollWidth + "px";
+      } else {
+        resultTag.style.left = e.x + "px";
+      }
+
+      resultTag.style.top = e.y + "px";
+
       setTimeout(() => {
         resultTag.classList.remove("wrongTag", "has-text-white");
         resultTag.textContent = "";
