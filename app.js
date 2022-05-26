@@ -116,6 +116,7 @@ function gameplayInit() {
     if (strokeWidthVal > 1) {
       locationsWithWideStroke.push(location.dataset.name);
       location.style.opacity = "0.5";
+      location.style.stroke = "#EBDCC9";
     }
 
     location.style.cursor = "crosshair";
