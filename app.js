@@ -43,9 +43,6 @@ let middleWindow = innerWidth / 2;
 reset.disabled = true;
 hint.style.display = "none";
 cheat.style.display = "none";
-body.append(resultTag);
-body.append(hintBeacon);
-body.append(locationTag);
 
 function placeItemOnLocation(location, item) {
   itemLocation = location.getBoundingClientRect();
@@ -85,6 +82,10 @@ function gameplayInit() {
   gameTimerLabel.style.textContent = "";
   mapSelectedByUser = mapSelect.value;
   mapSelect.disabled = true;
+
+  body.append(resultTag);
+  body.append(hintBeacon);
+  body.append(locationTag);
 
   //Only display the selected map; hide the others
   for (let map of maps) {
@@ -165,7 +166,6 @@ function mouseEnterConfig(location, e) {
     locationTag.textContent = `${location.dataset.name}`;
     locationTag.classList.add("locationTag", "has-text-dark");
     if (e.x > middleWindow) {
-      console.log(e.x);
       locationTag.style.left = e.x - locationTag.scrollWidth + "px";
     } else {
       locationTag.style.left = e.x + "px";
