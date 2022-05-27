@@ -10,6 +10,9 @@ const modal = document.querySelector(".modal");
 const gameTimerLabel = document.querySelector("#timer");
 const resultTag = document.createElement("span");
 const locationTag = document.createElement("span");
+const modalText = document.querySelector("#modal-text");
+const modalBox = document.querySelector("#modal-box");
+const modalCloseButton = document.querySelector(".modal-close");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -36,6 +39,7 @@ let lastKnownScrollPosition = 0;
 let ticking = false;
 let innerWidth = window.innerWidth;
 let middleWindow = innerWidth / 2;
+let isGameTimerOff = true;
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -48,17 +52,14 @@ cheat.style.display = "none";
 /*****Functions*****/
 /*******************/
 
-function placeItemOnLocation(location, item) {
-  itemLocation = location.getBoundingClientRect();
-  item.style.left = itemLocation.left + "px";
-  item.style.top = itemLocation.top + "px";
-}
+function placeItemOnLocation(location, item) {}
 
 function showHint() {
   hint.disabled = true;
   for (let location of map) {
     if (locationToSelect === location.dataset.name) {
-      placeItemOnLocation(location, hintBeacon);
+      hintBeacon.style.left = location.getBoundingClientRect().left + "px";
+      hintBeacon.style.top = location.getBoundingClientRect().top + "px";
       hintBeacon.classList.add("beacon");
       isBeaconOff = false;
 
@@ -67,7 +68,6 @@ function showHint() {
         hintBeacon.classList.remove("beacon");
         hintBeacon.style.left = "";
         hintBeacon.style.top = "";
-
         hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
         isBeaconOff = true;
       }, 5000);
@@ -76,6 +76,7 @@ function showHint() {
 }
 
 function gameplayInit() {
+  isGameTimerOff = true;
   hint.style.display = "";
   cheat.style.display = "";
   body.classList.remove("bg-img");
@@ -114,7 +115,7 @@ function gameplayInit() {
   for (let location of map) {
     allLocations.push(location.dataset.name);
     location.style.fill = "#EBDCC9";
-    location.classList.add("js-modal-trigger");
+    // location.classList.add("js-modal-trigger");
 
     strokeWidthVal = parseFloat(location.style.strokeWidth);
     if (strokeWidthVal > 1) {
@@ -129,12 +130,23 @@ function gameplayInit() {
   clickedLocation = null;
   chosenLocationIdx = Math.floor(Math.random() * allLocations.length - 1);
   locationToSelect = allLocations[chosenLocationIdx];
-
   locationLabel.textContent = locationToSelect.toUpperCase();
   hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
-
   locationLabel.style.color = "dark-grey";
   numberOfLocations = allLocations.length;
+  enableModal("start");
+}
+
+function enableModal(type) {
+  if (type === "result") {
+    modalText.textContent = "Great Job! You found all the locations!";
+    modalBox.style.backgroundColor = "mediumseagreen";
+    isGameTimerOff = false;
+  } else if (type === "start") {
+    modalText.textContent = `You have 30 minutes to pinpoint all the locations!`;
+    modalBox.style.backgroundColor = "#657889";
+  }
+  modal.classList.add("is-active");
 }
 
 function setGameTimer() {
@@ -142,6 +154,11 @@ function setGameTimer() {
   gameTimerId = setInterval(() => {
     gameTimer++;
     secondCount++;
+
+    if (gameTimer === 20 * 60) {
+      gameTimerLabel.classList.remove("has-text-grey-lighter");
+      gameTimerLabel.classList.add("has-text-danger");
+    }
 
     if (secondCount === 60) {
       minuteCount++;
@@ -198,7 +215,7 @@ function mouseLeaveConfig(location, e) {
   }
 }
 
-function processMouseClickOnLoation(location, e) {
+function processMouseClickOnLocation(location, e) {
   clickedLocation = location.dataset.name;
 
   if (clickedLocation === locationToSelect) {
@@ -212,13 +229,10 @@ function processMouseClickOnLoation(location, e) {
     hintBeacon.classList.remove("beacon");
     clearTimeout(hintTimeoutId);
     resultTag.classList.remove("wrongTag", "has-text-white");
-    // resultTag.textContent = "";
-
     hint.disabled = false;
     hintBeacon.style.left = "";
     hintBeacon.style.top = "";
     isBeaconOff = true;
-
     location.style.fill = "mediumseagreen";
     numberOfLocations = numberOfLocations - 1;
 
@@ -228,7 +242,8 @@ function processMouseClickOnLoation(location, e) {
       clearInterval(gameTimerId);
       reset.classList.add("is-focused");
       gameTimer = 0;
-      modal.classList.add("is-active");
+
+      enableModal("result");
       hint.textContent = "HINT";
       hint.disabled = true;
       cheat.disabled = true;
@@ -237,8 +252,10 @@ function processMouseClickOnLoation(location, e) {
       allLocations.splice(chosenLocationIdx, 1);
       chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
       locationToSelect = allLocations[chosenLocationIdx];
-      locationLabel.textContent = locationToSelect.toUpperCase();
-      hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+      if (locationToSelect) {
+        locationLabel.textContent = locationToSelect.toUpperCase();
+        hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+      }
     }
 
     resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
@@ -280,6 +297,8 @@ function processMouseClickOnLoation(location, e) {
 }
 
 function resetGame() {
+  gameTimerLabel.classList.add("has-text-grey-lighter");
+  gameTimerLabel.classList.remove("has-text-danger");
   hint.style.display = "none";
   cheat.style.display = "none";
   clearInterval(gameTimerId);
@@ -386,7 +405,7 @@ function processKeyboardEventKeyUp(e) {
       if (numberOfLocations !== 0)
         locationLabel.textContent = locationToSelect.toUpperCase();
     }
-    modal.classList.add("is-active");
+    enableModal("result");
 
     locationLabel.textContent = "";
     reset.classList.add("is-focused");
@@ -403,7 +422,6 @@ function findLocation(e) {
     if (location.dataset.name === locationToSelect) {
       location.style.fill = "mediumseagreen";
     }
-  
   }
 
   if (numberOfLocations === 0) {
@@ -413,7 +431,7 @@ function findLocation(e) {
     cheat.disabled = false;
     hint.disabled = false;
     locationLabel.textContent = "";
-    modal.classList.add("is-active");
+    enableModal("result");
     reset.classList.add("is-focused");
     hint.style.display = "none";
     cheat.style.display = "none";
@@ -421,7 +439,6 @@ function findLocation(e) {
     hintBeacon.style.left = "";
     hintBeacon.style.top = "";
     isBeaconOff = true;
-    
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
@@ -466,7 +483,6 @@ function removeModal() {
 
 mapSelect.addEventListener("change", (e) => {
   gameplayInit();
-  setGameTimer();
 
   for (let location of map) {
     location.addEventListener("mouseenter", (e) => {
@@ -479,8 +495,7 @@ mapSelect.addEventListener("change", (e) => {
 
     location.addEventListener("click", (e) => {
       e.stopPropagation();
-      processMouseClickOnLoation(location, e);
-      console.log(location.dataset.name)
+      processMouseClickOnLocation(location, e);
     });
   }
 });
@@ -490,7 +505,7 @@ body.addEventListener("keyup", (e) => {
 });
 
 body.addEventListener("click", (e) => {
-  removeModal(e);
+  // removeModal(e);
 });
 
 cheat.addEventListener("click", (e) => {
@@ -511,6 +526,13 @@ document.addEventListener("scroll", function (e) {
     });
 
     ticking = true;
+  }
+});
+
+modalCloseButton.addEventListener("click", (e) => {
+  removeModal();
+  if (isGameTimerOff) {
+    setGameTimer();
   }
 });
 

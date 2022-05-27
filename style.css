@@ -161,6 +161,7 @@ body{
   animation: shine 2s ease-in-out infinite;
 }
 
+
 #location{
   text-align: center;
   font-weight: bold;
@@ -177,9 +178,16 @@ body{
 }
 
 #modal-box{
-  background-color: mediumseagreen;
+  /* background-color: mediumseagreen; */
   color: white;
 }
+
+
+
+/* #modal-text{
+  background-color: mediumseagreen;
+  color: white;
+} */
 
 
  /* beacon created by Amie Chen https://codepen.io/amiechen/pen/vmKrKL*/
@@ -213,6 +221,18 @@ body{
    }
  }
 
+ .modal-close{
+  animation: pulse 2s ease-in-out infinite alternate;
 
+}
+
+ @keyframes pulse {
+  0%, 30% {
+    box-shadow: 0px 0px 10px 0px rgb(248, 245, 245); 
+  }
+  100% {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0); 
+  }
+}
  
 
