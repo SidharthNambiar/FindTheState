@@ -44,6 +44,10 @@ reset.disabled = true;
 hint.style.display = "none";
 cheat.style.display = "none";
 
+/*******************/
+/*****Functions*****/
+/*******************/
+
 function placeItemOnLocation(location, item) {
   itemLocation = location.getBoundingClientRect();
   item.style.left = itemLocation.left + "px";
@@ -312,7 +316,7 @@ function resetGame() {
   hintBeacon.classList.remove("beacon");
   hintBeacon.style.left = "";
   hintBeacon.style.top = "";
-  hintBeacon.remove();
+  isBeaconOff = true;
 
   mapSelect.classList.add("is-focused");
   body.classList.add("bg-img");
@@ -361,7 +365,10 @@ function processKeyboardEventKeyUp(e) {
     cheat.disabled = false;
     clearInterval(gameTimerId);
     gameTimer = 0;
-    // clearTimeout(hintTimeoutId)
+    hintBeacon.classList.remove("beacon");
+    hintBeacon.style.left = "";
+    hintBeacon.style.top = "";
+    isBeaconOff = true;
 
     while (numberOfLocations !== 0) {
       for (let location of map) {
@@ -370,7 +377,6 @@ function processKeyboardEventKeyUp(e) {
         }
         if (locationsWithWideStroke.includes(location.dataset.name)) {
           location.style.strokeWidth = String(strokeWidthVal / 5);
-          // locationsWithWideStroke.splice(locationsWithWideStroke.indexOf(location.dataset.name),1)
         }
       }
       numberOfLocations = numberOfLocations - 1;
@@ -397,9 +403,7 @@ function findLocation(e) {
     if (location.dataset.name === locationToSelect) {
       location.style.fill = "mediumseagreen";
     }
-    // if (location.style.fill === "rgb(255, 224, 138)") {
-    //   location.style.fill = "#EBDCC9";
-    // }
+  
   }
 
   if (numberOfLocations === 0) {
@@ -413,6 +417,11 @@ function findLocation(e) {
     reset.classList.add("is-focused");
     hint.style.display = "none";
     cheat.style.display = "none";
+    hintBeacon.classList.remove("beacon");
+    hintBeacon.style.left = "";
+    hintBeacon.style.top = "";
+    isBeaconOff = true;
+    
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
@@ -450,6 +459,10 @@ function removeModal() {
     modal.classList.remove("is-active");
   }
 }
+
+/******************/
+/**Event Listeners*/
+/******************/
 
 mapSelect.addEventListener("change", (e) => {
   gameplayInit();
