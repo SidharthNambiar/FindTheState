@@ -81,9 +81,6 @@ MY CSS
 
  .wrongTag, .rightTag{
 
-  
-  
-
   width: fit-content;
   height: fit-content;
   position: fixed;
@@ -129,7 +126,7 @@ MY CSS
     background-repeat:  no-repeat;
     background-attachment: fixed;
     background-size:  cover;
-    background-color: #999; 
+    background-color: #596887; 
 
     
 }

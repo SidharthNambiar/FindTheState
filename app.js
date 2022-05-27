@@ -480,6 +480,7 @@ mapSelect.addEventListener("change", (e) => {
     location.addEventListener("click", (e) => {
       e.stopPropagation();
       processMouseClickOnLoation(location, e);
+      console.log(location.dataset.name)
     });
   }
 });
