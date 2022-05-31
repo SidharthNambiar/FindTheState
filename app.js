@@ -40,6 +40,8 @@ let ticking = false;
 let innerWidth = window.innerWidth;
 let middleWindow = innerWidth / 2;
 let isGameTimerOff = true;
+let hintTimeoutDelay = 5000;
+
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -52,7 +54,7 @@ cheat.style.display = "none";
 /*****Functions*****/
 /*******************/
 
-function placeItemOnLocation(location, item) {}
+
 
 function showHint() {
   hint.disabled = true;
@@ -70,7 +72,7 @@ function showHint() {
         hintBeacon.style.top = "";
         hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
         isBeaconOff = true;
-      }, 5000);
+      }, hintTimeoutDelay);
     }
   }
 }
@@ -416,12 +418,15 @@ function findLocation(e) {
   e.stopPropagation();
   clearTimeout(hintTimeoutId);
   hint.disabled = false;
-
   numberOfLocations = numberOfLocations - 1;
   for (let location of map) {
     if (location.dataset.name === locationToSelect) {
       location.style.fill = "mediumseagreen";
+      if (locationsWithWideStroke.includes(location.dataset.name)) {
+        location.style.strokeWidth = String(strokeWidthVal / 5);
+      }
     }
+   
   }
 
   if (numberOfLocations === 0) {
@@ -466,8 +471,8 @@ function resetHintAtScroll(scrollPos) {
     hintBeacon.style.top = "";
 
     hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
-    isBeaconOff = true;
-    showHint();
+    // isBeaconOff = true;
+    if(!isBeaconOff)showHint();
   }
 }
 
