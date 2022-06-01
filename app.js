@@ -418,6 +418,9 @@ function processKeyboardEventKeyUp(e) {
 function processKeyboardEventKeyDown(e) {
   if (e.key === "Escape" && isModalDisplayed) {
     removeModal()
+    if (isGameTimerOff) {
+      setGameTimer();
+    }
   }
 }
 
@@ -520,6 +523,7 @@ body.addEventListener("keyup", (e) => {
 body.addEventListener("keydown", (e) => {
 
   processKeyboardEventKeyDown(e)
+
   
 });
 
