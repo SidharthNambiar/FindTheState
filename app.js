@@ -41,6 +41,7 @@ let innerWidth = window.innerWidth;
 let middleWindow = innerWidth / 2;
 let isGameTimerOff = true;
 let hintTimeoutDelay = 5000;
+let isModalDisplayed = false;
 
 
 // let mouseHoldIntervalId;
@@ -117,8 +118,6 @@ function gameplayInit() {
   for (let location of map) {
     allLocations.push(location.dataset.name);
     location.style.fill = "#EBDCC9";
-    // location.classList.add("js-modal-trigger");
-
     strokeWidthVal = parseFloat(location.style.strokeWidth);
     if (strokeWidthVal > 1) {
       locationsWithWideStroke.push(location.dataset.name);
@@ -140,7 +139,9 @@ function gameplayInit() {
 }
 
 function enableModal(type) {
+  isModalDisplayed = true;
   if (type === "result") {
+
     modalText.textContent = "Great Job! You found all the locations!";
     modalBox.style.backgroundColor = "mediumseagreen";
     isGameTimerOff = false;
@@ -313,7 +314,7 @@ function resetGame() {
   allLocations = allLocations.slice();
   clickedLocation = null;
   clickedLocations = [];
-
+  isModalDisplayed = false;
   locationLabel.textContent = "";
 
   for (let location of map) {
@@ -414,6 +415,12 @@ function processKeyboardEventKeyUp(e) {
   }
 }
 
+function processKeyboardEventKeyDown(e) {
+  if (e.key === "Escape" && isModalDisplayed) {
+    removeModal()
+  }
+}
+
 function findLocation(e) {
   e.stopPropagation();
   clearTimeout(hintTimeoutId);
@@ -479,6 +486,7 @@ function resetHintAtScroll(scrollPos) {
 function removeModal() {
   if (Object.values(modal.classList).includes("is-active")) {
     modal.classList.remove("is-active");
+    isModalDisplayed = false;
   }
 }
 
@@ -509,8 +517,10 @@ body.addEventListener("keyup", (e) => {
   processKeyboardEventKeyUp(e);
 });
 
-body.addEventListener("click", (e) => {
-  // removeModal(e);
+body.addEventListener("keydown", (e) => {
+
+  processKeyboardEventKeyDown(e)
+  
 });
 
 cheat.addEventListener("click", (e) => {
