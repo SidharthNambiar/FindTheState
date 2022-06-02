@@ -580,6 +580,19 @@ modalCloseButton.addEventListener("click", (e) => {
   }
 });
 
+visualViewport.addEventListener('resize', function(e) {
+
+
+  innerWidth = window.innerWidth;
+  innerHeight = window.innerHeight;
+  middleWindowX = innerWidth / 2;
+  middleWindowY = innerHeight / 2;
+
+
+
+});
+
+
 // body.addEventListener("mousedown", (e) => {
 
 //   locationTag.style.left = e.x +"px" ;
@@ -607,22 +620,6 @@ modalCloseButton.addEventListener("click", (e) => {
 // let originalOffsetTopHintButton = hint.offsetTop + 'px';
 // let originalOffsetTopCheatButton = cheat.offsetTop + 'px';
 
-// visualViewport.addEventListener('resize', function(e) {
-//   /* ... */
-
-//   if (e.target.offsetTop === 0) {
-//     hint.style.top = originalOffsetTopHintButton;
-//     cheat.style.top = originalOffsetTopCheatButton
-//   }
-//   else {
-//     hint.style.top = e.target.offsetTop + 'px';
-//     hint.style.left = e.target.offsetLeft + 'px'
-//     hint.style.right = e.target.offsetRight +'px'
-
-//     cheat.style.top = e.target.offsetTop + 'px';
-//   }
-
-// });
 
 // setInterval((e) => {
 //   
