@@ -38,7 +38,9 @@ let keyCountLowL = 0;
 let lastKnownScrollPosition = 0;
 let ticking = false;
 let innerWidth = window.innerWidth;
-let middleWindow = innerWidth / 2;
+let innerHeight = window.innerHeight;
+let middleWindowX = innerWidth / 2;
+let middleWindowY = innerHeight / 2;
 let isGameTimerOff = true;
 let hintTimeoutDelay = 5000;
 let isModalDisplayed = false;
@@ -190,13 +192,20 @@ function mouseEnterConfig(location, e) {
   } else if (location.style.fill === "mediumseagreen") {
     locationTag.textContent = `${location.dataset.name}`;
     locationTag.classList.add("locationTag", "has-text-dark");
-    if (e.x > middleWindow) {
+    if (e.x > middleWindowX) {
       locationTag.style.left = e.x - locationTag.scrollWidth + "px";
     } else {
       locationTag.style.left = e.x + "px";
     }
 
-    locationTag.style.top = e.y + "px";
+    if (e.y > middleWindowY) {
+      locationTag.style.top = e.y - locationTag.scrollHeight + "px"
+    }
+    else {
+      locationTag.style.top = e.y + "px";
+    }
+
+    
   }
 
   if (locationsWithWideStroke.includes(location.dataset.name)) {
@@ -264,13 +273,23 @@ function processMouseClickOnLocation(location, e) {
     resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
     resultTag.classList.add("rightTag", "is-white");
 
-    if (e.x > middleWindow) {
+    if (e.x > middleWindowX) {
       resultTag.style.left = e.x - resultTag.scrollWidth + "px";
     } else {
       resultTag.style.left = e.x + "px";
     }
 
-    resultTag.style.top = e.y + "px";
+    if (e.y > middleWindowY) {
+      resultTag.style.top = e.y - resultTag.scrollHeight + "px"
+    }
+    else {
+      resultTag.style.top = e.y + "px";
+    }
+    
+
+  
+
+    
 
     setTimeout(() => {
       resultTag.classList.remove("rightTag", "is-white");
@@ -283,13 +302,19 @@ function processMouseClickOnLocation(location, e) {
       resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
       resultTag.classList.add("wrongTag", "has-text-white");
 
-      if (e.x > middleWindow) {
+      if (e.x > middleWindowX) {
         resultTag.style.left = e.x - resultTag.scrollWidth + "px";
       } else {
         resultTag.style.left = e.x + "px";
       }
 
-      resultTag.style.top = e.y + "px";
+      if (e.y > middleWindowY) {
+        resultTag.style.top = e.y - resultTag.scrollHeight + "px"
+      }
+      else {
+        resultTag.style.top = e.y + "px";
+      }
+      
 
       setTimeout(() => {
         resultTag.classList.remove("wrongTag", "has-text-white");
@@ -600,7 +625,7 @@ modalCloseButton.addEventListener("click", (e) => {
 // });
 
 // setInterval((e) => {
-//   // console.log(cheat.disabled)
+//   
 //   if (cheat.style.display !== "none") {
 //     findLocation()
 //   }
