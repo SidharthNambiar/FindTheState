@@ -13,6 +13,7 @@ const locationTag = document.createElement("span");
 const modalText = document.querySelector("#modal-text");
 const modalBox = document.querySelector("#modal-box");
 const modalCloseButton = document.querySelector(".modal-close");
+const locationCount = document.querySelector("#locationCount")
 
 let allLocations = [];
 let clickedLocation = null;
@@ -45,6 +46,7 @@ let isGameTimerOff = true;
 let hintTimeoutDelay = 5000;
 let isModalDisplayed = false;
 let isGameTimeUp = false;
+let totalLocations = 0;
 
 
 
@@ -91,6 +93,7 @@ function gameplayInit() {
   hint.disabled = false;
   cheat.disabled = false;
   locationLabel.textContent = "";
+  locationCount.textContent = "";
   gameTimerLabel.style.textContent = "";
   mapSelectedByUser = mapSelect.value;
   mapSelect.disabled = true;
@@ -140,6 +143,8 @@ function gameplayInit() {
   hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
   locationLabel.style.color = "dark-grey";
   numberOfLocations = allLocations.length;
+  totalLocations = numberOfLocations
+  locationCount.textContent = `0 - ${totalLocations}`
   enableModal("start");
 }
 
@@ -163,13 +168,11 @@ function enableModal(type) {
 
 function setGameTimer() {
   gameTimerLabel.textContent = "00:00";
+
   gameTimerId = setInterval(() => {
     gameTimer++;
     secondCount++;
-   
-
-
-    
+       
     if (gameTimer === 5 * 60) {
       gameTimerLabel.classList.remove("has-text-grey-lighter");
       gameTimerLabel.classList.add("has-text-warning");
@@ -267,6 +270,7 @@ function processMouseClickOnLocation(location, e) {
     isBeaconOff = true;
     location.style.fill = "mediumseagreen";
     numberOfLocations = numberOfLocations - 1;
+    locationCount.textContent = `${totalLocations - numberOfLocations} - ${totalLocations}`
 
     if (numberOfLocations === 0) {
       hint.style.display = "none";
@@ -280,6 +284,7 @@ function processMouseClickOnLocation(location, e) {
       hint.disabled = true;
       cheat.disabled = true;
       locationLabel.textContent = "";
+      locationCount.textContent = `${totalLocations} - ${totalLocations}`
     } else {
       allLocations.splice(chosenLocationIdx, 1);
       chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
@@ -361,7 +366,9 @@ function resetGame(e) {
   clickedLocations = [];
   isModalDisplayed = false;
   locationLabel.textContent = "";
+  locationCount.textContent = "";
   isGameTimeUp = false;
+  
 
   for (let location of map) {
     location.style.fill = "#EBDCC9";
@@ -454,6 +461,7 @@ function processKeyboardEventKeyUp(e) {
       if (numberOfLocations !== 0)
         locationLabel.textContent = locationToSelect.toUpperCase();
     }
+    locationCount.textContent = `${totalLocations} - ${totalLocations}`
     enableModal("result");
 
     locationLabel.textContent = "";
@@ -479,6 +487,7 @@ function findLocation(e) {
   clearTimeout(hintTimeoutId);
   hint.disabled = false;
   numberOfLocations = numberOfLocations - 1;
+
   for (let location of map) {
     if (location.dataset.name === locationToSelect) {
       location.style.fill = "mediumseagreen";
@@ -488,7 +497,8 @@ function findLocation(e) {
     }
    
   }
-
+  
+  locationCount.textContent = `${totalLocations - numberOfLocations} - ${totalLocations}`
   if (numberOfLocations === 0) {
     clearInterval(gameTimerId);
     hint.textContent = "HINT";
@@ -504,6 +514,7 @@ function findLocation(e) {
     hintBeacon.style.left = "";
     hintBeacon.style.top = "";
     isBeaconOff = true;
+    locationCount.textContent = `${totalLocations} - ${totalLocations}`
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);

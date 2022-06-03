@@ -55,7 +55,7 @@ MY CSS
 ***********/
 
 
-#location, .title, #timer, .maps{
+#location, .title, #timer, .maps, #locationCount{
 
     text-align: center;
 
