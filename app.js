@@ -44,6 +44,8 @@ let middleWindowY = innerHeight / 2;
 let isGameTimerOff = true;
 let hintTimeoutDelay = 5000;
 let isModalDisplayed = false;
+let isGameTimeUp = false;
+
 
 
 // let mouseHoldIntervalId;
@@ -92,6 +94,7 @@ function gameplayInit() {
   gameTimerLabel.style.textContent = "";
   mapSelectedByUser = mapSelect.value;
   mapSelect.disabled = true;
+  isGameTimeUp = false;
 
   body.append(resultTag);
   body.append(hintBeacon);
@@ -148,8 +151,12 @@ function enableModal(type) {
     modalBox.style.backgroundColor = "mediumseagreen";
     isGameTimerOff = false;
   } else if (type === "start") {
-    modalText.textContent = `You have 30 minutes to pinpoint all the locations!`;
+    modalText.textContent = `You have 15 minutes to pinpoint all the locations!`;
     modalBox.style.backgroundColor = "#657889";
+  }
+  else if (type === "time-up") {
+    modalText.textContent = `Time's Up! Try Again!`;
+    modalBox.style.backgroundColor = "#f14668";
   }
   modal.classList.add("is-active");
 }
@@ -159,11 +166,24 @@ function setGameTimer() {
   gameTimerId = setInterval(() => {
     gameTimer++;
     secondCount++;
+   
 
-    if (gameTimer === 20 * 60) {
+
+    
+    if (gameTimer === 5 * 60) {
       gameTimerLabel.classList.remove("has-text-grey-lighter");
+      gameTimerLabel.classList.add("has-text-warning");
+    }
+    if (gameTimer === 10 * 60) {
+      gameTimerLabel.classList.remove("has-text-warning");
       gameTimerLabel.classList.add("has-text-danger");
     }
+    if (gameTimer === 15 * 60) {
+      isGameTimeUp = true;
+      clearInterval(gameTimerId);
+      enableModal("time-up")
+    }
+    
 
     if (secondCount === 60) {
       minuteCount++;
@@ -324,7 +344,7 @@ function processMouseClickOnLocation(location, e) {
   }
 }
 
-function resetGame() {
+function resetGame(e) {
   gameTimerLabel.classList.add("has-text-grey-lighter");
   gameTimerLabel.classList.remove("has-text-danger");
   hint.style.display = "none";
@@ -341,6 +361,7 @@ function resetGame() {
   clickedLocations = [];
   isModalDisplayed = false;
   locationLabel.textContent = "";
+  isGameTimeUp = false;
 
   for (let location of map) {
     location.style.fill = "#EBDCC9";
@@ -445,6 +466,10 @@ function processKeyboardEventKeyDown(e) {
     removeModal()
     if (isGameTimerOff) {
       setGameTimer();
+    }
+    if (isGameTimeUp) {
+
+      resetGame(e);
     }
   }
 }
@@ -578,17 +603,18 @@ modalCloseButton.addEventListener("click", (e) => {
   if (isGameTimerOff) {
     setGameTimer();
   }
+  if (isGameTimeUp) {
+    
+    resetGame(e);
+  }
 });
 
 visualViewport.addEventListener('resize', function(e) {
-
 
   innerWidth = window.innerWidth;
   innerHeight = window.innerHeight;
   middleWindowX = innerWidth / 2;
   middleWindowY = innerHeight / 2;
-
-
 
 });
 
