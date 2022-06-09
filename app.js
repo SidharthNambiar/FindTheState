@@ -47,6 +47,8 @@ let hintTimeoutDelay = 5000;
 let isModalDisplayed = false;
 let isGameTimeUp = false;
 let totalLocations = 0;
+let numOfAttempts = 0;
+let finalResult = 0;
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -94,6 +96,7 @@ function gameplayInit() {
   mapSelectedByUser = mapSelect.value;
   mapSelect.disabled = true;
   isGameTimeUp = false;
+  numOfAttempts = 0;
 
   body.append(resultTag);
   body.append(hintBeacon);
@@ -149,7 +152,11 @@ function gameplayInit() {
 function enableModal(type) {
   isModalDisplayed = true;
   if (type === "result") {
-    modalText.textContent = "Great Job! You found all the locations!";
+    finalResult = totalLocations / numOfAttempts;
+    finalResult *= 100;
+    finalResult = finalResult.toFixed(2)
+    modalText.innerText = `You pinpointed all ${totalLocations} locations in ${numOfAttempts} attempts.`;
+    modalText.innerText += `\nYour score is ${finalResult}%.`;
     modalBox.style.backgroundColor = "mediumseagreen";
     isGameTimerOff = false;
   } else if (type === "start") {
@@ -245,6 +252,11 @@ function mouseLeaveConfig(location, e) {
 function processMouseClickOnLocation(location, e) {
   clickedLocation = location.dataset.name;
 
+  if (location.style.fill != "mediumseagreen") {
+
+    numOfAttempts++;
+  }
+
   if (clickedLocation === locationToSelect) {
     if (locationsWithWideStroke.includes(clickedLocation)) {
       location.style.strokeWidth = String(strokeWidthVal / 5);
@@ -337,6 +349,7 @@ function processMouseClickOnLocation(location, e) {
       }, 1000);
     }
   }
+  console.log("inside click:", numOfAttempts)
 }
 
 function resetGame(e) {
@@ -358,6 +371,7 @@ function resetGame(e) {
   locationLabel.textContent = "";
   locationCount.textContent = "";
   isGameTimeUp = false;
+  numOfAttempts = 0;
 
   for (let location of map) {
     location.style.fill = "#EBDCC9";
@@ -441,6 +455,7 @@ function processKeyboardEventKeyUp(e) {
     while (numberOfLocations !== 0) {
       for (let location of map) {
         if (location.dataset.name === locationToSelect) {
+          
           location.style.fill = "mediumseagreen";
         }
         if (locationsWithWideStroke.includes(location.dataset.name)) {
@@ -455,6 +470,7 @@ function processKeyboardEventKeyUp(e) {
         locationLabel.textContent = locationToSelect.toUpperCase();
     }
     locationCount.textContent = `${totalLocations} - ${totalLocations}`;
+    numOfAttempts = totalLocations;
     enableModal("result");
 
     locationLabel.textContent = "";
@@ -479,9 +495,11 @@ function findLocation(e) {
   clearTimeout(hintTimeoutId);
   hint.disabled = false;
   numberOfLocations = numberOfLocations - 1;
-
+  
   for (let location of map) {
     if (location.dataset.name === locationToSelect) {
+      numOfAttempts++;
+      console.log("inside help:", numOfAttempts)
       location.style.fill = "mediumseagreen";
       if (locationsWithWideStroke.includes(location.dataset.name)) {
         location.style.strokeWidth = String(strokeWidthVal / 5);
@@ -564,8 +582,9 @@ mapSelect.addEventListener("change", (e) => {
     });
 
     location.addEventListener("click", (e) => {
-      e.stopPropagation();
+      // e.stopPropagation();
       processMouseClickOnLocation(location, e);
+      e.stopImmediatePropagation();
     });
   }
 });
