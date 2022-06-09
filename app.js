@@ -137,10 +137,12 @@ function gameplayInit() {
   }
 
   clickedLocation = null;
-  chosenLocationIdx = Math.floor(Math.random() * allLocations.length - 1);
+  chosenLocationIdx = Math.floor(Math.random() * allLocations.length);
   locationToSelect = allLocations[chosenLocationIdx];
-  locationLabel.textContent = locationToSelect.toUpperCase();
-  hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+  if (locationToSelect) {
+    locationLabel.textContent = locationToSelect.toUpperCase();
+    hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
+  }
   locationLabel.style.color = "dark-grey";
   numberOfLocations = allLocations.length;
   totalLocations = numberOfLocations
@@ -256,10 +258,10 @@ function processMouseClickOnLocation(location, e) {
   if (clickedLocation === locationToSelect) {
     if (locationsWithWideStroke.includes(clickedLocation)) {
       location.style.strokeWidth = String(strokeWidthVal / 5);
-      locationsWithWideStroke.splice(
-        locationsWithWideStroke.indexOf(location.dataset.name),
-        1
-      );
+      // locationsWithWideStroke.splice(
+      //   locationsWithWideStroke.indexOf(location.dataset.name),
+      //   1
+      // );
     }
     hintBeacon.classList.remove("beacon");
     clearTimeout(hintTimeoutId);
@@ -370,11 +372,13 @@ function resetGame(e) {
   isGameTimeUp = false;
   
 
+
   for (let location of map) {
     location.style.fill = "#EBDCC9";
-    if (locationsWithWideStroke.includes(location.dataset.name)) {
-      strokeWidth = parseFloat(location.style.strokeWidth);
-      location.style.strokeWidth = String(strokeWidth + 5);
+    strokeWidthVal = parseFloat(location.style.strokeWidth);
+    
+    if (locationsWithWideStroke.includes(location.dataset.name) && strokeWidthVal < 5 ) {
+      location.style.strokeWidth = String(strokeWidthVal + 5);
     }
   }
   mapSelect.disabled = false;
