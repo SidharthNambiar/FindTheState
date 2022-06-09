@@ -13,7 +13,7 @@ const locationTag = document.createElement("span");
 const modalText = document.querySelector("#modal-text");
 const modalBox = document.querySelector("#modal-box");
 const modalCloseButton = document.querySelector(".modal-close");
-const locationCount = document.querySelector("#locationCount")
+const locationCount = document.querySelector("#locationCount");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -48,8 +48,6 @@ let isModalDisplayed = false;
 let isGameTimeUp = false;
 let totalLocations = 0;
 
-
-
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
 
@@ -60,8 +58,6 @@ cheat.style.display = "none";
 /*******************/
 /*****Functions*****/
 /*******************/
-
-
 
 function showHint() {
   hint.disabled = true;
@@ -145,23 +141,21 @@ function gameplayInit() {
   }
   locationLabel.style.color = "dark-grey";
   numberOfLocations = allLocations.length;
-  totalLocations = numberOfLocations
-  locationCount.textContent = `0 - ${totalLocations}`
+  totalLocations = numberOfLocations;
+  locationCount.textContent = `0 - ${totalLocations}`;
   enableModal("start");
 }
 
 function enableModal(type) {
   isModalDisplayed = true;
   if (type === "result") {
-
     modalText.textContent = "Great Job! You found all the locations!";
     modalBox.style.backgroundColor = "mediumseagreen";
     isGameTimerOff = false;
   } else if (type === "start") {
     modalText.textContent = `You have 15 minutes to pinpoint all the locations!`;
     modalBox.style.backgroundColor = "#657889";
-  }
-  else if (type === "time-up") {
+  } else if (type === "time-up") {
     modalText.textContent = `Time's Up! Try Again!`;
     modalBox.style.backgroundColor = "#f14668";
   }
@@ -174,7 +168,7 @@ function setGameTimer() {
   gameTimerId = setInterval(() => {
     gameTimer++;
     secondCount++;
-       
+
     if (gameTimer === 5 * 60) {
       gameTimerLabel.classList.remove("has-text-grey-lighter");
       gameTimerLabel.classList.add("has-text-warning");
@@ -186,9 +180,8 @@ function setGameTimer() {
     if (gameTimer === 15 * 60) {
       isGameTimeUp = true;
       clearInterval(gameTimerId);
-      enableModal("time-up")
+      enableModal("time-up");
     }
-    
 
     if (secondCount === 60) {
       minuteCount++;
@@ -224,13 +217,10 @@ function mouseEnterConfig(location, e) {
     }
 
     if (e.y > middleWindowY) {
-      locationTag.style.top = e.y - locationTag.scrollHeight + "px"
-    }
-    else {
+      locationTag.style.top = e.y - locationTag.scrollHeight + "px";
+    } else {
       locationTag.style.top = e.y + "px";
     }
-
-    
   }
 
   if (locationsWithWideStroke.includes(location.dataset.name)) {
@@ -272,7 +262,9 @@ function processMouseClickOnLocation(location, e) {
     isBeaconOff = true;
     location.style.fill = "mediumseagreen";
     numberOfLocations = numberOfLocations - 1;
-    locationCount.textContent = `${totalLocations - numberOfLocations} - ${totalLocations}`
+    locationCount.textContent = `${
+      totalLocations - numberOfLocations
+    } - ${totalLocations}`;
 
     if (numberOfLocations === 0) {
       hint.style.display = "none";
@@ -286,7 +278,7 @@ function processMouseClickOnLocation(location, e) {
       hint.disabled = true;
       cheat.disabled = true;
       locationLabel.textContent = "";
-      locationCount.textContent = `${totalLocations} - ${totalLocations}`
+      locationCount.textContent = `${totalLocations} - ${totalLocations}`;
     } else {
       allLocations.splice(chosenLocationIdx, 1);
       chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
@@ -297,7 +289,9 @@ function processMouseClickOnLocation(location, e) {
       }
     }
 
-    resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
+    if (locationToSelect) {
+      resultTag.textContent = "PINPOINT " + locationToSelect.toUpperCase();
+    }
     resultTag.classList.add("rightTag", "is-white");
 
     if (e.x > middleWindowX) {
@@ -307,16 +301,10 @@ function processMouseClickOnLocation(location, e) {
     }
 
     if (e.y > middleWindowY) {
-      resultTag.style.top = e.y - resultTag.scrollHeight + "px"
-    }
-    else {
+      resultTag.style.top = e.y - resultTag.scrollHeight + "px";
+    } else {
       resultTag.style.top = e.y + "px";
     }
-    
-
-  
-
-    
 
     setTimeout(() => {
       resultTag.classList.remove("rightTag", "is-white");
@@ -326,7 +314,9 @@ function processMouseClickOnLocation(location, e) {
     if (location.style.fill !== "mediumseagreen") {
       resultTag.classList.remove("rightTag", "is-white");
 
-      resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
+      if (locationToSelect) {
+        resultTag.textContent = "NOT " + locationToSelect.toUpperCase() + "!";
+      }
       resultTag.classList.add("wrongTag", "has-text-white");
 
       if (e.x > middleWindowX) {
@@ -336,12 +326,10 @@ function processMouseClickOnLocation(location, e) {
       }
 
       if (e.y > middleWindowY) {
-        resultTag.style.top = e.y - resultTag.scrollHeight + "px"
-      }
-      else {
+        resultTag.style.top = e.y - resultTag.scrollHeight + "px";
+      } else {
         resultTag.style.top = e.y + "px";
       }
-      
 
       setTimeout(() => {
         resultTag.classList.remove("wrongTag", "has-text-white");
@@ -370,14 +358,15 @@ function resetGame(e) {
   locationLabel.textContent = "";
   locationCount.textContent = "";
   isGameTimeUp = false;
-  
-
 
   for (let location of map) {
     location.style.fill = "#EBDCC9";
     strokeWidthVal = parseFloat(location.style.strokeWidth);
-    
-    if (locationsWithWideStroke.includes(location.dataset.name) && strokeWidthVal < 5 ) {
+
+    if (
+      locationsWithWideStroke.includes(location.dataset.name) &&
+      strokeWidthVal < 5
+    ) {
       location.style.strokeWidth = String(strokeWidthVal + 5);
     }
   }
@@ -465,7 +454,7 @@ function processKeyboardEventKeyUp(e) {
       if (numberOfLocations !== 0)
         locationLabel.textContent = locationToSelect.toUpperCase();
     }
-    locationCount.textContent = `${totalLocations} - ${totalLocations}`
+    locationCount.textContent = `${totalLocations} - ${totalLocations}`;
     enableModal("result");
 
     locationLabel.textContent = "";
@@ -475,12 +464,11 @@ function processKeyboardEventKeyUp(e) {
 
 function processKeyboardEventKeyDown(e) {
   if (e.key === "Escape" && isModalDisplayed) {
-    removeModal()
+    removeModal();
     if (isGameTimerOff) {
       setGameTimer();
     }
     if (isGameTimeUp) {
-
       resetGame(e);
     }
   }
@@ -499,10 +487,11 @@ function findLocation(e) {
         location.style.strokeWidth = String(strokeWidthVal / 5);
       }
     }
-   
   }
-  
-  locationCount.textContent = `${totalLocations - numberOfLocations} - ${totalLocations}`
+
+  locationCount.textContent = `${
+    totalLocations - numberOfLocations
+  } - ${totalLocations}`;
   if (numberOfLocations === 0) {
     clearInterval(gameTimerId);
     hint.textContent = "HINT";
@@ -518,7 +507,7 @@ function findLocation(e) {
     hintBeacon.style.left = "";
     hintBeacon.style.top = "";
     isBeaconOff = true;
-    locationCount.textContent = `${totalLocations} - ${totalLocations}`
+    locationCount.textContent = `${totalLocations} - ${totalLocations}`;
   } else {
     allLocations.splice(allLocations.indexOf(locationToSelect), 1);
     chosenLocationIdx = Math.floor(Math.random() * numberOfLocations);
@@ -547,7 +536,7 @@ function resetHintAtScroll(scrollPos) {
 
     hint.textContent = "HINT FOR " + locationToSelect.toUpperCase();
     // isBeaconOff = true;
-    if(!isBeaconOff)showHint();
+    if (!isBeaconOff) showHint();
   }
 }
 
@@ -586,10 +575,7 @@ body.addEventListener("keyup", (e) => {
 });
 
 body.addEventListener("keydown", (e) => {
-
-  processKeyboardEventKeyDown(e)
-
-  
+  processKeyboardEventKeyDown(e);
 });
 
 cheat.addEventListener("click", (e) => {
@@ -619,20 +605,16 @@ modalCloseButton.addEventListener("click", (e) => {
     setGameTimer();
   }
   if (isGameTimeUp) {
-    
     resetGame(e);
   }
 });
 
-visualViewport.addEventListener('resize', function(e) {
-
+visualViewport.addEventListener("resize", function (e) {
   innerWidth = window.innerWidth;
   innerHeight = window.innerHeight;
   middleWindowX = innerWidth / 2;
   middleWindowY = innerHeight / 2;
-
 });
-
 
 // body.addEventListener("mousedown", (e) => {
 
@@ -661,9 +643,8 @@ visualViewport.addEventListener('resize', function(e) {
 // let originalOffsetTopHintButton = hint.offsetTop + 'px';
 // let originalOffsetTopCheatButton = cheat.offsetTop + 'px';
 
-
 // setInterval((e) => {
-//   
+//
 //   if (cheat.style.display !== "none") {
 //     findLocation()
 //   }
