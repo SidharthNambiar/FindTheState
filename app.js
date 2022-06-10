@@ -152,11 +152,8 @@ function gameplayInit() {
 function enableModal(type) {
   isModalDisplayed = true;
   if (type === "result") {
-    finalResult = totalLocations / numOfAttempts;
-    finalResult *= 100;
-    finalResult = finalResult.toFixed(2)
-    modalText.innerText = `You pinpointed all ${totalLocations} locations in ${numOfAttempts} attempts.`;
-    modalText.innerText += `\nYour score is ${finalResult}%.`;
+   
+    modalText.innerText = `You pinpointed all ${totalLocations} locations in ${numOfAttempts} attempts.\nTime: ${gameTimerLabel.textContent}`;
     modalBox.style.backgroundColor = "mediumseagreen";
     isGameTimerOff = false;
   } else if (type === "start") {
@@ -349,7 +346,6 @@ function processMouseClickOnLocation(location, e) {
       }, 1000);
     }
   }
-  console.log("inside click:", numOfAttempts)
 }
 
 function resetGame(e) {
@@ -499,7 +495,6 @@ function findLocation(e) {
   for (let location of map) {
     if (location.dataset.name === locationToSelect) {
       numOfAttempts++;
-      console.log("inside help:", numOfAttempts)
       location.style.fill = "mediumseagreen";
       if (locationsWithWideStroke.includes(location.dataset.name)) {
         location.style.strokeWidth = String(strokeWidthVal / 5);
@@ -596,6 +591,13 @@ body.addEventListener("keyup", (e) => {
 body.addEventListener("keydown", (e) => {
   processKeyboardEventKeyDown(e);
 });
+
+body.addEventListener("click", (e) => {
+  
+  if (isModalDisplayed) {
+    removeModal();
+  }
+})
 
 cheat.addEventListener("click", (e) => {
   findLocation(e);
