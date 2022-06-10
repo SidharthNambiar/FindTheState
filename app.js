@@ -596,7 +596,15 @@ body.addEventListener("click", (e) => {
   
   if (isModalDisplayed) {
     removeModal();
+    if (isGameTimerOff) {
+      setGameTimer();
+    }
+    if (isGameTimeUp) {
+      resetGame(e);
+    }
   }
+  
+ 
 })
 
 cheat.addEventListener("click", (e) => {
