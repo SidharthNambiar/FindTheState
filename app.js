@@ -14,6 +14,8 @@ const modalText = document.querySelector("#modal-text");
 const modalBox = document.querySelector("#modal-box");
 const modalCloseButton = document.querySelector(".modal-close");
 const locationCount = document.querySelector("#locationCount");
+const pauseBtn = document.querySelector("#pause");
+const loader = document.querySelector("#loader")
 
 let allLocations = [];
 let clickedLocation = null;
@@ -49,6 +51,7 @@ let isGameTimeUp = false;
 let totalLocations = 0;
 let numOfAttempts = 0;
 let finalResult = 0;
+let isPauseOff = true;
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -56,6 +59,7 @@ let finalResult = 0;
 reset.disabled = true;
 hint.style.display = "none";
 cheat.style.display = "none";
+pauseBtn.style.display = "none";
 
 /*******************/
 /*****Functions*****/
@@ -86,6 +90,7 @@ function gameplayInit() {
   isGameTimerOff = true;
   hint.style.display = "";
   cheat.style.display = "";
+  pauseBtn.style.display = "";
   body.classList.remove("bg-img");
   reset.disabled = false;
   hint.disabled = false;
@@ -97,6 +102,7 @@ function gameplayInit() {
   mapSelect.disabled = true;
   isGameTimeUp = false;
   numOfAttempts = 0;
+  isPauseOff = true;
 
   body.append(resultTag);
   body.append(hintBeacon);
@@ -152,22 +158,27 @@ function gameplayInit() {
 function enableModal(type) {
   isModalDisplayed = true;
   if (type === "result") {
-   
     modalText.innerText = `You pinpointed all ${totalLocations} locations in ${numOfAttempts} attempts.\nTime: ${gameTimerLabel.textContent}`;
     modalBox.style.backgroundColor = "mediumseagreen";
     isGameTimerOff = false;
   } else if (type === "start") {
-    modalText.textContent = `You have 15 minutes to pinpoint all the locations!`;
+    modalText.textContent = `You have 15 minutes to pinpoint the locations.`;
     modalBox.style.backgroundColor = "#657889";
   } else if (type === "time-up") {
-    modalText.textContent = `Time's Up! Try Again!`;
+    modalText.textContent = `Time's Up! Try Again.`;
     modalBox.style.backgroundColor = "#f14668";
+  } else if (type === "pause") {
+    modalText.textContent = `Game Paused. Close To Resume.`;
+    modalBox.style.backgroundColor = "#485FC7";
+    loader.classList.add("button", "is-loading", "is-link", "is-large")
   }
   modal.classList.add("is-active");
 }
 
 function setGameTimer() {
-  gameTimerLabel.textContent = "00:00";
+  if (gameTimerLabel.textContent === "") {
+    gameTimerLabel.textContent = "00:00";
+  }
 
   gameTimerId = setInterval(() => {
     gameTimer++;
@@ -206,6 +217,19 @@ function setGameTimer() {
 
     gameTimerLabel.textContent = `${minuteLabel}:${secondLabel}`;
   }, 1000);
+}
+
+function pauseGame(e) {
+  clearTimeout(gameTimerId);
+  isPauseOff = false;
+  enableModal("pause");
+}
+
+function resumeGame(e) {
+  isPauseOff = true;
+  loader.classList.remove("button", "is-loading", "is-link")
+
+  setGameTimer();
 }
 
 function mouseEnterConfig(location, e) {
@@ -250,7 +274,6 @@ function processMouseClickOnLocation(location, e) {
   clickedLocation = location.dataset.name;
 
   if (location.style.fill != "mediumseagreen") {
-
     numOfAttempts++;
   }
 
@@ -278,6 +301,7 @@ function processMouseClickOnLocation(location, e) {
     if (numberOfLocations === 0) {
       hint.style.display = "none";
       cheat.style.display = "none";
+      pauseBtn.style.display = "none";
       clearInterval(gameTimerId);
       reset.classList.add("is-focused");
       gameTimer = 0;
@@ -353,6 +377,7 @@ function resetGame(e) {
   gameTimerLabel.classList.remove("has-text-danger");
   hint.style.display = "none";
   cheat.style.display = "none";
+  pauseBtn.style.display = "none";
   clearInterval(gameTimerId);
   clearTimeout(hintTimeoutId);
   hint.textContent = "HINT";
@@ -437,6 +462,7 @@ function processKeyboardEventKeyUp(e) {
   if (keyCountLowC === 3 && !hint.disabled) {
     hint.style.display = "none";
     cheat.style.display = "none";
+    pauseBtn.style.display = "none";
     keyCountLowC = 0;
     hint.textContent = "HINT";
     hint.disabled = false;
@@ -451,7 +477,6 @@ function processKeyboardEventKeyUp(e) {
     while (numberOfLocations !== 0) {
       for (let location of map) {
         if (location.dataset.name === locationToSelect) {
-          
           location.style.fill = "mediumseagreen";
         }
         if (locationsWithWideStroke.includes(location.dataset.name)) {
@@ -477,11 +502,15 @@ function processKeyboardEventKeyUp(e) {
 function processKeyboardEventKeyDown(e) {
   if (e.key === "Escape" && isModalDisplayed) {
     removeModal();
-    if (isGameTimerOff) {
+
+    if (isGameTimerOff && isPauseOff) {
       setGameTimer();
     }
     if (isGameTimeUp) {
       resetGame(e);
+    }
+    if (!isPauseOff) {
+      resumeGame();
     }
   }
 }
@@ -491,7 +520,7 @@ function findLocation(e) {
   clearTimeout(hintTimeoutId);
   hint.disabled = false;
   numberOfLocations = numberOfLocations - 1;
-  
+
   for (let location of map) {
     if (location.dataset.name === locationToSelect) {
       numOfAttempts++;
@@ -516,6 +545,7 @@ function findLocation(e) {
     reset.classList.add("is-focused");
     hint.style.display = "none";
     cheat.style.display = "none";
+    pauseBtn.style.display = "none";
     hintBeacon.classList.remove("beacon");
     hintBeacon.style.left = "";
     hintBeacon.style.top = "";
@@ -593,19 +623,19 @@ body.addEventListener("keydown", (e) => {
 });
 
 body.addEventListener("click", (e) => {
-  
   if (isModalDisplayed) {
     removeModal();
-    if (isGameTimerOff) {
+    if (isGameTimerOff && isPauseOff) {
       setGameTimer();
     }
     if (isGameTimeUp) {
       resetGame(e);
     }
+    if (!isPauseOff) {
+      resumeGame();
+    }
   }
-  
- 
-})
+});
 
 cheat.addEventListener("click", (e) => {
   findLocation(e);
@@ -630,11 +660,15 @@ document.addEventListener("scroll", function (e) {
 
 modalCloseButton.addEventListener("click", (e) => {
   removeModal();
-  if (isGameTimerOff) {
+
+  if (isGameTimerOff && isPauseOff) {
     setGameTimer();
   }
   if (isGameTimeUp) {
     resetGame(e);
+  }
+  if (!isPauseOff) {
+    resumeGame();
   }
 });
 
@@ -643,6 +677,12 @@ visualViewport.addEventListener("resize", function (e) {
   innerHeight = window.innerHeight;
   middleWindowX = innerWidth / 2;
   middleWindowY = innerHeight / 2;
+});
+
+pauseBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  pauseGame(e);
 });
 
 // body.addEventListener("mousedown", (e) => {

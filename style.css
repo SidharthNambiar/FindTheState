@@ -64,6 +64,9 @@ MY CSS
 .locationText{
   margin-top: 10px;
 }
+#loader{
+  display: flex;
+}
 
 .title{
   background-color: #657889;
@@ -161,6 +164,9 @@ body{
   animation: shine 2s ease-in-out infinite;
 }
 
+/* #pause:focus {
+  animation: shine 2s ease-in-out infinite;
+} */
 
 #location{
   text-align: center;
@@ -178,16 +184,16 @@ body{
 }
 
 #modal-box{
-  /* background-color: mediumseagreen; */
   color: white;
 }
 
 
 
-/* #modal-text{
-  background-color: mediumseagreen;
-  color: white;
-} */
+
+
+#modal-text{
+  text-align: center;
+}
 
 
  /* beacon created by Amie Chen https://codepen.io/amiechen/pen/vmKrKL*/
