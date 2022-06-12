@@ -15,7 +15,7 @@ const modalBox = document.querySelector("#modal-box");
 const modalCloseButton = document.querySelector(".modal-close");
 const locationCount = document.querySelector("#locationCount");
 const pauseBtn = document.querySelector("#pause");
-const loader = document.querySelector("#loader")
+const loader = document.querySelector("#loader");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -170,10 +170,16 @@ function enableModal(type) {
   } else if (type === "pause") {
     modalText.textContent = "";
     modalBox.style.backgroundColor = "#485FC7";
-    loader.classList.add("button", "is-focused", "is-success", "is-normal", "resume", "has-text-grey-dark")
-    loader.textContent = "RESUME GAME"
-    modalCloseButton.style.display = "none"
-   
+    loader.classList.add(
+      "button",
+      "is-focused",
+      "is-success",
+      "is-normal",
+      "resume",
+      "has-text-grey-dark"
+    );
+    loader.textContent = "RESUME GAME";
+    modalCloseButton.style.display = "none";
   }
   modal.classList.add("is-active");
 }
@@ -230,9 +236,16 @@ function pauseGame(e) {
 
 function resumeGame(e) {
   isPauseOff = true;
-  
-  loader.classList.remove("button", "is-focused", "is-warning", "is-normal")
-  loader.textContent = ""
+  loader.textContent = "";
+  loader.classList.remove(
+    "button",
+    "is-focused",
+    "is-success",
+    "is-normal",
+    "resume",
+    "has-text-grey-dark"
+  );
+  modalCloseButton.style.display = "";
 
   setGameTimer();
 }
@@ -514,7 +527,6 @@ function processKeyboardEventKeyDown(e) {
     if (isGameTimeUp) {
       resetGame(e);
     }
-   
   }
 }
 
@@ -634,7 +646,6 @@ body.addEventListener("click", (e) => {
     if (isGameTimeUp) {
       resetGame(e);
     }
-    
   }
 });
 
@@ -643,7 +654,7 @@ loader.addEventListener("click", (e) => {
   if (!isPauseOff) {
     resumeGame();
   }
-})
+});
 cheat.addEventListener("click", (e) => {
   findLocation(e);
 });
