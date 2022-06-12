@@ -65,7 +65,10 @@ MY CSS
   margin-top: 10px;
 }
 #loader{
-  display: flex;
+  /* display:inline;
+  text-align: center; */
+  /* flex-direction: row;
+  justify-content: center; */
 }
 
 .title{
@@ -185,9 +188,15 @@ body{
 
 #modal-box{
   color: white;
+  display: flex;
+  flex-direction:  column;
+  align-items: center;
 }
 
+.resume{
+  animation: pulse2 2s ease-in-out infinite;
 
+}
 
 
 
@@ -241,4 +250,12 @@ body{
   }
 }
  
+@keyframes pulse2 {
+  0%, 50% {
+    box-shadow: 0px 0px 10px 0px rgb(199, 218, 209); 
+  }
+  0%, 100% {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0); 
+  }
+}
 

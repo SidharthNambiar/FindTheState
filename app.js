@@ -168,9 +168,12 @@ function enableModal(type) {
     modalText.textContent = `Time's Up! Try Again.`;
     modalBox.style.backgroundColor = "#f14668";
   } else if (type === "pause") {
-    modalText.textContent = `Game Paused. Close To Resume.`;
+    modalText.textContent = "";
     modalBox.style.backgroundColor = "#485FC7";
-    loader.classList.add("button", "is-loading", "is-link", "is-large")
+    loader.classList.add("button", "is-focused", "is-success", "is-normal", "resume", "has-text-grey-dark")
+    loader.textContent = "RESUME GAME"
+    modalCloseButton.style.display = "none"
+   
   }
   modal.classList.add("is-active");
 }
@@ -227,7 +230,9 @@ function pauseGame(e) {
 
 function resumeGame(e) {
   isPauseOff = true;
-  loader.classList.remove("button", "is-loading", "is-link")
+  
+  loader.classList.remove("button", "is-focused", "is-warning", "is-normal")
+  loader.textContent = ""
 
   setGameTimer();
 }
@@ -500,7 +505,7 @@ function processKeyboardEventKeyUp(e) {
 }
 
 function processKeyboardEventKeyDown(e) {
-  if (e.key === "Escape" && isModalDisplayed) {
+  if (e.key === "Escape" && isModalDisplayed && isPauseOff) {
     removeModal();
 
     if (isGameTimerOff && isPauseOff) {
@@ -509,9 +514,7 @@ function processKeyboardEventKeyDown(e) {
     if (isGameTimeUp) {
       resetGame(e);
     }
-    if (!isPauseOff) {
-      resumeGame();
-    }
+   
   }
 }
 
@@ -623,7 +626,7 @@ body.addEventListener("keydown", (e) => {
 });
 
 body.addEventListener("click", (e) => {
-  if (isModalDisplayed) {
+  if (isModalDisplayed && isPauseOff) {
     removeModal();
     if (isGameTimerOff && isPauseOff) {
       setGameTimer();
@@ -631,12 +634,16 @@ body.addEventListener("click", (e) => {
     if (isGameTimeUp) {
       resetGame(e);
     }
-    if (!isPauseOff) {
-      resumeGame();
-    }
+    
   }
 });
 
+loader.addEventListener("click", (e) => {
+  removeModal();
+  if (!isPauseOff) {
+    resumeGame();
+  }
+})
 cheat.addEventListener("click", (e) => {
   findLocation(e);
 });
