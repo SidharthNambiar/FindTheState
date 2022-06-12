@@ -57,6 +57,7 @@ let isPauseOff = true;
 // let mouseholdCnt = 0;
 
 reset.disabled = true;
+reset.style.display = "none";
 hint.style.display = "none";
 cheat.style.display = "none";
 pauseBtn.style.display = "none";
@@ -90,6 +91,7 @@ function gameplayInit() {
   isGameTimerOff = true;
   hint.style.display = "";
   cheat.style.display = "";
+  reset.style.display = "";
   pauseBtn.style.display = "";
   body.classList.remove("bg-img");
   reset.disabled = false;
@@ -169,14 +171,14 @@ function enableModal(type) {
     modalBox.style.backgroundColor = "#f14668";
   } else if (type === "pause") {
     modalText.textContent = "";
-    modalBox.style.backgroundColor = "#485FC7";
+    modalBox.style.backgroundColor = "rgba(0,0,0,0)";
     loader.classList.add(
       "button",
       "is-focused",
       "is-success",
       "is-normal",
       "resume",
-      "has-text-grey-dark"
+      "has-text-white"
     );
     loader.textContent = "RESUME GAME";
     modalCloseButton.style.display = "none";
@@ -395,6 +397,7 @@ function resetGame(e) {
   gameTimerLabel.classList.remove("has-text-danger");
   hint.style.display = "none";
   cheat.style.display = "none";
+  reset.style.display = "none";
   pauseBtn.style.display = "none";
   clearInterval(gameTimerId);
   clearTimeout(hintTimeoutId);
