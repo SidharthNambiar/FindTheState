@@ -15,11 +15,9 @@ const modalCloseButton = document.querySelector(".modal-close");
 const locationCount = document.querySelector("#locationCount");
 const pauseBtn = document.querySelector("#pause");
 const loader = document.querySelector("#loader");
-const dropdownItems = document.querySelectorAll(".dropdown-item")
-const dropdownBtn = document.querySelector("#dropdown-button")
-const dropdown = document.querySelector(".dropdown")
-
-
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+const dropdownBtn = document.querySelector("#dropdown-button");
+const dropdown = document.querySelector(".dropdown");
 
 let allLocations = [];
 let clickedLocation = null;
@@ -106,6 +104,7 @@ function gameplayInit() {
   locationCount.textContent = "";
   gameTimerLabel.style.textContent = "";
   dropdownBtn.disabled = true;
+  dropdownBtn.style.display = "none";
   isGameTimeUp = false;
   numOfAttempts = 0;
   isPauseOff = true;
@@ -418,6 +417,7 @@ function resetGame(e) {
   locationCount.textContent = "";
   isGameTimeUp = false;
   numOfAttempts = 0;
+  dropdownBtn.style.display = "";
 
   for (let location of map) {
     location.style.fill = "#EBDCC9";
@@ -616,48 +616,38 @@ function removeModal() {
 
 dropdown.addEventListener("mouseleave", (e) => {
   isDropDownBtnClicked = false;
-  dropdown.classList.remove("is-active")
-})
-
+  dropdown.classList.remove("is-active");
+});
 
 dropdownBtn.addEventListener("click", (e) => {
   isDropDownBtnClicked = true;
-  dropdown.classList.add("is-active")
-
-
-})
+  dropdown.classList.add("is-active");
+});
 
 for (let item of dropdownItems) {
-  
   item.addEventListener("click", (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     mapSelectedByUser = item.name;
-    dropdown.classList.remove("is-active")
+    dropdown.classList.remove("is-active");
 
     gameplayInit();
     for (let location of map) {
       location.addEventListener("mouseenter", (e) => {
         mouseEnterConfig(location, e);
       });
-  
+
       location.addEventListener("mouseleave", (e) => {
         mouseLeaveConfig(location, e);
       });
-  
+
       location.addEventListener("click", (e) => {
         // e.stopPropagation();
         processMouseClickOnLocation(location, e);
         e.stopImmediatePropagation();
       });
     }
-
-
-  })
+  });
 }
-
-
-
-
 
 body.addEventListener("keyup", (e) => {
   processKeyboardEventKeyUp(e);

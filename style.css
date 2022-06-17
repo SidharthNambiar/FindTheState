@@ -160,25 +160,34 @@ body{
 }
 
 #hintCheatButtons{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  position: fixed;
+ 
+  opacity: .6;
+
+  /* margin-right:100px; */
+  right:20px;
+  
+  
+  
   
 }
-#cheat{
-    position: fixed;
-    right: 10px;
-    margin-left:10px;
-    opacity: .8;
+ #cheat {
+    margin-left: 10px;
+   
+   
 }
+
 
 #hint:disabled{
   animation: shine 2s ease-in-out infinite;
 }
 
-/* #pause:focus {
-  animation: shine 2s ease-in-out infinite;
-} */
+#controls{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between
+  
+}
 
 #location{
   text-align: center;
@@ -252,8 +261,12 @@ body{
 
 #dropdown-button:enabled{
   animation: pulse3 2s ease-in-out infinite alternate;
+  background-color: #657889;
+  color:#F9F0E0;
 
 }
+
+
  @keyframes pulse {
   0%, 30% {
     box-shadow: 0px 0px 10px 0px rgb(248, 245, 245); 
@@ -273,11 +286,11 @@ body{
 }
 
 @keyframes pulse3 {
-  0%, 30% {
-    box-shadow: 0px 0px 10px 0px rgb(0,0,0); 
+  0%, 50% {
+    box-shadow: 0px 0px 30px 0px #e9910d; 
   }
-  100% {
-    box-shadow: 0px 0px 10px 0px rgba(255,255,255); 
+  0%, 100% {
+    box-shadow: 0px 0px 20px 0px #FAFBF6; 
   }
 }
 
