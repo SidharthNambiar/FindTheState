@@ -61,8 +61,17 @@ MY CSS
 
 }
 
-.locationText{
+
+
+.locationText, #location{
   margin-top: 10px;
+}
+
+.dropdown-section{
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 #loader{
   /* display:inline;
@@ -79,7 +88,7 @@ MY CSS
 #timer{
   font-weight: bold;
 }
-.select{
+.select, .dropdown{
   margin-left: 10px;
 }
 
@@ -177,7 +186,7 @@ body{
 
 }
 
-.locatioText{
+.locationText{
   margin: auto;
 }
 
@@ -241,6 +250,10 @@ body{
 
 }
 
+#dropdown-button:enabled{
+  animation: pulse3 2s ease-in-out infinite alternate;
+
+}
  @keyframes pulse {
   0%, 30% {
     box-shadow: 0px 0px 10px 0px rgb(248, 245, 245); 
@@ -256,6 +269,15 @@ body{
   }
   0%, 100% {
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0); 
+  }
+}
+
+@keyframes pulse3 {
+  0%, 30% {
+    box-shadow: 0px 0px 10px 0px rgb(0,0,0); 
+  }
+  100% {
+    box-shadow: 0px 0px 10px 0px rgba(255,255,255); 
   }
 }
 

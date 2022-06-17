@@ -30,26 +30,63 @@
       </h1>
     </div>
 
+    
 <div id="controls">
-    <div class="select is-rounded" >
-      <select id="mapSelect" >
-        <option value="">Select Map</option>
-        <option value="india">INDIA</option>
-        <option value="usa">USA</option>
-        <option value="asia">ASIA & OCEANIA</option>
-        <option value="europe">EUROPE</option>
-        <option value="africa">AFRICA</option>
-        <option value="world">WORLD</option>
-        <option value="north-america">NORTH AMERICA</option>
-      </select>
+
+      <div class="dropdown">
+        <div class="dropdown-trigger">
+          <button class="button is-rounded" aria-haspopup="true" aria-controls="dropdown-menu"
+          id="dropdown-button">
+            <span>SELECT MAP</span>
+            <span class="icon is-small">
+              <i class="fas fa-angle-down" aria-hidden="false"></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            
+            <span class="dropdown-section">Countries</span>
+            <hr class="dropdown-divider">
+            <a name="india" class="dropdown-item">
+              INDIA
+            </a>
+            <a name="usa" class="dropdown-item">
+              USA
+            </a>
+            <hr class="dropdown-divider">
+            <span class="dropdown-section">Regions</span>
+            <hr class="dropdown-divider">
+            <a name="asia" class="dropdown-item">
+              ASIA & OCEANIA
+            </a>
+            <a name="africa" class="dropdown-item">
+              AFRICA
+            </a>
+            
+            <a name="europe" class="dropdown-item">
+             EUROPE
+            </a>
+            <a name="north-america" class="dropdown-item">
+              NORTH AMERICA
+            </a>
+            <a name="world" class="dropdown-item">
+             WORLD
+            </a>
+          </div>
+        </div>
+      </div>
+      <button class="button is-danger is-rounded is-normal" id="reset">RESET</button>
+        <button class="button is-link is-rounded is-normal" id="pause">PAUSE</button>
     </div>
+
    
 
    
 <!-- <span id="buttons"> -->
       
-        <button class="button is-danger is-rounded is-normal" id="reset">RESET</button>
-        <button class="button is-link is-rounded is-normal" id="pause">PAUSE</button>
+        <!-- <button class="button is-danger is-rounded is-normal" id="reset">RESET</button>
+        <button class="button is-link is-rounded is-normal" id="pause">PAUSE</button> -->
       
        
       
@@ -62,10 +99,8 @@
 <!-- </span>    -->
 
     <div class="locationText">
-      
       <h2 class="subtitle is-2 has-text-white" id="location"></h2>
       
-    
     </div>
     
 <div>
@@ -1421,24 +1456,19 @@
      </svg>
       </div>
       <div id="usa" class="maps" hidden="true">
+        <?xml version="1.0"?>
         <svg
-          xmlns:dc="http://purl.org/dc/elements/1.1/"
-          xmlns:cc="http://creativecommons.org/ns#"
-          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-          xmlns:svg="http://www.w3.org/2000/svg"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-          xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-          enable_background="new 0 0 1000 589"
-          height="589"
-          pretty_print="False"
-          style="stroke-linejoin: round; stroke: #000; fill: none"
-          version="1.1"
-          viewBox="0 0 1000 589"
+          baseprofile="tiny"
+          fill="#ececec"
+          height="1136"
+          stroke="black"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width=".1"
+          version="1.2"
+          viewbox="0 0 1000 1136"
           width="1000"
-          id="svg"
-          inkscape:version="0.48.4 r9939"
-          sodipodi:docname="us.svg"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             inkscape:connector-curvature="0"

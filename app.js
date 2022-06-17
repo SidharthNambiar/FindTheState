@@ -1,4 +1,3 @@
-const mapSelect = document.querySelector("#mapSelect");
 const maps = document.querySelectorAll(".maps");
 const locationLabel = document.querySelector("#location");
 const reset = document.querySelector("#reset");
@@ -16,6 +15,11 @@ const modalCloseButton = document.querySelector(".modal-close");
 const locationCount = document.querySelector("#locationCount");
 const pauseBtn = document.querySelector("#pause");
 const loader = document.querySelector("#loader");
+const dropdownItems = document.querySelectorAll(".dropdown-item")
+const dropdownBtn = document.querySelector("#dropdown-button")
+const dropdown = document.querySelector(".dropdown")
+
+
 
 let allLocations = [];
 let clickedLocation = null;
@@ -23,7 +27,7 @@ let chosenLocationIdx = null;
 let locationToSelect = "";
 let numberOfLocations = null;
 let clickedLocations = [];
-let mapSelectedByUser = "usa";
+let mapSelectedByUser = "";
 let isBeaconOff = true;
 let map = null;
 let locationsWithWideStroke = [];
@@ -52,6 +56,7 @@ let totalLocations = 0;
 let numOfAttempts = 0;
 let finalResult = 0;
 let isPauseOff = true;
+let isDropDownBtnClicked = false;
 
 // let mouseHoldIntervalId;
 // let mouseholdCnt = 0;
@@ -100,8 +105,7 @@ function gameplayInit() {
   locationLabel.textContent = "";
   locationCount.textContent = "";
   gameTimerLabel.style.textContent = "";
-  mapSelectedByUser = mapSelect.value;
-  mapSelect.disabled = true;
+  dropdownBtn.disabled = true;
   isGameTimeUp = false;
   numOfAttempts = 0;
   isPauseOff = true;
@@ -426,7 +430,6 @@ function resetGame(e) {
       location.style.strokeWidth = String(strokeWidthVal + 5);
     }
   }
-  mapSelect.disabled = false;
 
   for (let map of maps) {
     map.classList.remove("is-flex");
@@ -435,16 +438,15 @@ function resetGame(e) {
   reset.disabled = true;
   hint.disabled = false;
   cheat.disabled = false;
-  mapSelect.value = "";
 
   hintBeacon.classList.remove("beacon");
   hintBeacon.style.left = "";
   hintBeacon.style.top = "";
   isBeaconOff = true;
 
-  mapSelect.classList.add("is-focused");
   body.classList.add("bg-img");
   locationsWithWideStroke = [];
+  dropdownBtn.disabled = false;
 }
 
 hint.addEventListener("click", (e) => {
@@ -612,25 +614,50 @@ function removeModal() {
 /**Event Listeners*/
 /******************/
 
-mapSelect.addEventListener("change", (e) => {
-  gameplayInit();
+dropdown.addEventListener("mouseleave", (e) => {
+  isDropDownBtnClicked = false;
+  dropdown.classList.remove("is-active")
+})
 
-  for (let location of map) {
-    location.addEventListener("mouseenter", (e) => {
-      mouseEnterConfig(location, e);
-    });
 
-    location.addEventListener("mouseleave", (e) => {
-      mouseLeaveConfig(location, e);
-    });
+dropdownBtn.addEventListener("click", (e) => {
+  isDropDownBtnClicked = true;
+  dropdown.classList.add("is-active")
 
-    location.addEventListener("click", (e) => {
-      // e.stopPropagation();
-      processMouseClickOnLocation(location, e);
-      e.stopImmediatePropagation();
-    });
-  }
-});
+
+})
+
+for (let item of dropdownItems) {
+  
+  item.addEventListener("click", (e) => {
+    e.stopPropagation()
+    mapSelectedByUser = item.name;
+    dropdown.classList.remove("is-active")
+
+    gameplayInit();
+    for (let location of map) {
+      location.addEventListener("mouseenter", (e) => {
+        mouseEnterConfig(location, e);
+      });
+  
+      location.addEventListener("mouseleave", (e) => {
+        mouseLeaveConfig(location, e);
+      });
+  
+      location.addEventListener("click", (e) => {
+        // e.stopPropagation();
+        processMouseClickOnLocation(location, e);
+        e.stopImmediatePropagation();
+      });
+    }
+
+
+  })
+}
+
+
+
+
 
 body.addEventListener("keyup", (e) => {
   processKeyboardEventKeyUp(e);
