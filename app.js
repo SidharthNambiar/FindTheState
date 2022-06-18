@@ -139,7 +139,7 @@ function gameplayInit() {
     strokeWidthVal = parseFloat(location.style.strokeWidth);
     if (strokeWidthVal > 1) {
       locationsWithWideStroke.push(location.dataset.name);
-      location.style.opacity = "0.5";
+      // location.style.opacity = "0.5";
       location.style.stroke = "#EBDCC9";
     }
 
@@ -274,8 +274,13 @@ function mouseEnterConfig(location, e) {
     }
   }
 
-  if (locationsWithWideStroke.includes(location.dataset.name)) {
+  strokeWidthVal = parseFloat(location.style.strokeWidth);
+  if (locationsWithWideStroke.includes(location.dataset.name) && strokeWidthVal > 5) {
     location.style.opacity = "1";
+    location.style.stroke = "white"
+   
+    location.style.strokeWidth = strokeWidthVal * 2.5;
+    
   }
 }
 
@@ -283,7 +288,8 @@ function mouseLeaveConfig(location, e) {
   if (location.style.fill !== "mediumseagreen") {
     location.style.fill = "#EBDCC9";
     if (locationsWithWideStroke.includes(location.dataset.name)) {
-      location.style.opacity = "0.5";
+      location.style.stroke = "#EBDCC9";
+      location.style.strokeWidth = strokeWidthVal;
     }
   } else if (location.style.fill === "mediumseagreen") {
     locationTag.style.left = null;
@@ -299,14 +305,13 @@ function processMouseClickOnLocation(location, e) {
   if (location.style.fill != "mediumseagreen") {
     numOfAttempts++;
   }
-
+  
   if (clickedLocation === locationToSelect) {
+    strokeWidthVal = parseFloat(location.style.strokeWidth);
     if (locationsWithWideStroke.includes(clickedLocation)) {
       location.style.strokeWidth = String(strokeWidthVal / 5);
-      // locationsWithWideStroke.splice(
-      //   locationsWithWideStroke.indexOf(location.dataset.name),
-      //   1
-      // );
+      
+     
     }
     hintBeacon.classList.remove("beacon");
     clearTimeout(hintTimeoutId);
@@ -634,10 +639,12 @@ for (let item of dropdownItems) {
     for (let location of map) {
       location.addEventListener("mouseenter", (e) => {
         mouseEnterConfig(location, e);
+        e.stopImmediatePropagation()
       });
 
       location.addEventListener("mouseleave", (e) => {
         mouseLeaveConfig(location, e);
+        e.stopImmediatePropagation()
       });
 
       location.addEventListener("click", (e) => {

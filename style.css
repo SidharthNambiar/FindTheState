@@ -61,10 +61,11 @@ MY CSS
 
 }
 
-
-
+.hero-foot{
+  margin: auto;
+}
 .locationText, #location{
-  margin-top: 10px;
+  margin-top: auto;
 }
 
 .dropdown-section{
@@ -195,9 +196,9 @@ body{
 
 }
 
-.locationText{
+/* .locationText{
   margin: auto;
-}
+} */
 
 #hintCheatButtons{
   display: flex;
