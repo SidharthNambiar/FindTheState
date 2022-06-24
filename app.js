@@ -307,9 +307,10 @@ function processMouseClickOnLocation(location, e) {
   }
   
   if (clickedLocation === locationToSelect) {
-    strokeWidthVal = parseFloat(location.style.strokeWidth);
+    // strokeWidthVal = parseFloat(location.style.strokeWidth);
     if (locationsWithWideStroke.includes(clickedLocation)) {
       location.style.strokeWidth = String(strokeWidthVal / 5);
+      location.style.stroke = "mediumseagreen";
       
      
     }
@@ -509,6 +510,7 @@ function processKeyboardEventKeyUp(e) {
         }
         if (locationsWithWideStroke.includes(location.dataset.name)) {
           location.style.strokeWidth = String(strokeWidthVal / 5);
+          location.style.stroke = "black";
         }
       }
       numberOfLocations = numberOfLocations - 1;
@@ -552,6 +554,8 @@ function findLocation(e) {
       location.style.fill = "mediumseagreen";
       if (locationsWithWideStroke.includes(location.dataset.name)) {
         location.style.strokeWidth = String(strokeWidthVal / 5);
+        location.style.stroke = "black";
+
       }
     }
   }
